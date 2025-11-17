@@ -337,7 +337,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
         </Grid>
       </TabPanel>
 
-      {/* AUDIO */}
+      {/* AUDIO Message */}
       <TabPanel value={tab} index={4}>
         <Typography
           variant="h5"
