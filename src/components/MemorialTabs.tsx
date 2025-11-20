@@ -35,6 +35,9 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
   const [photoFile, setPhotoFile] = useState(null);
   const [photoDescription, setPhotoDescription] = useState("");
   const { user } = useAuth();
+  console.log(user,'user')
+  console.log(memorial,'memorial')
+  const isUser=user.id===memorial.createdBy
   const uploadPhoto = async () => {
     if (!photoFile) return alert("Please select a photo");
 
@@ -158,7 +161,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
       {/* ABOUT TAB */}
 
        <TabPanel value={tab} index={0}>
-        <AboutTab/>
+        <AboutTab memorial={memorial} />
        </TabPanel>
 
       <TabPanel value={tab} index={1}>
@@ -168,7 +171,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
       {/* PHOTOS */}
       <TabPanel value={tab} index={2}>
         {/* Upload Section */}
-        {user && (
+        {isUser && (
           <Paper
             sx={{
               p: 3,
@@ -347,7 +350,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
 
       {/* AUDIO Message */}
       <TabPanel value={tab} index={4}>
-        <AudioTributes memorialId={memorial._id} tab={tab} />
+        <AudioTributes memorialId={memorial._id} isUser={isUser} tab={tab} />
       </TabPanel>
     </Paper>
   );

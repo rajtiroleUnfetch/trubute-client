@@ -13,14 +13,16 @@
     interface AudioTributesProps {
     memorialId: string;
     tab: number; // load only when tab is active
+    isUser:boolean;
     }
 
-    const AudioTributes = ({ memorialId, tab }: AudioTributesProps) => {
+    const AudioTributes = ({ memorialId, tab,isUser }: AudioTributesProps) => {
     const { user } = useAuth();
     const queryClient = useQueryClient();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [page, setPage] = useState(1);
+    const isOwner=user.id===memorialId
 
     // -----------------------------
     // FETCH AUDIO LIST (paginated)
@@ -102,7 +104,7 @@
         {/* ---------------------------
             UPLOAD AUDIO
         --------------------------- */}
-        {user && (
+        {isUser && (
             <Paper
             sx={{
                 p: 3,

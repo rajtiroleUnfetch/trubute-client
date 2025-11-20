@@ -89,41 +89,6 @@ const MemorialFullPage = () => {
           Created on {new Date(memorial?.createdAt).toLocaleDateString()}
         </Typography>
 
-        <Divider sx={{ my: 3 }} />
-
-        <Divider sx={{ my: 3 }} />
-
-        <Typography variant="h5" mb={2}>
-          Tributes
-        </Typography>
-
-        {memorial?.tributes?.length === 0 && (
-          <Typography>No tributes yet.</Typography>
-        )}
-
-        {memorial?.tributes?.map((t: any) => (
-          <Paper key={t._id} sx={{ p: 2, mb: 2 }}>
-            <Typography fontWeight={600}>
-              {t.createdBy?.name || "Anonymous"}
-            </Typography>
-
-            {t.type === "text" && <Typography>{t.text}</Typography>}
-
-            {t.type === "photo" && (
-              <img src={t.mediaUrl} style={{ width: "200px", marginTop: 10 }} />
-            )}
-
-            {t.type === "video" && (
-              <video src={t.mediaUrl} controls style={{ width: "300px" }} />
-            )}
-
-            {t.type === "audio" && <audio src={t.mediaUrl} controls />}
-
-            <Typography variant="caption">
-              {new Date(t?.createdAt).toLocaleString()}
-            </Typography>
-          </Paper>
-        ))}
       </Paper>
     </Box>
   );
