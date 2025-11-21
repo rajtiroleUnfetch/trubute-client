@@ -49,12 +49,12 @@ const HomePage: React.FC = () => {
 
       {/* ------------------ FEATURED TRIBUTES (CAROUSEL) ------------------ */}
 
-      <Container sx={{ py: 6 }}>
-        <Typography variant="h4" textAlign="center" mb={3} fontWeight={600}>
-          Featured Tributes
-        </Typography>
-        <CarouselCards />
-      </Container>
+      {/* <Container sx={{ py: 6 }}> */}
+      {/*   <Typography variant="h4" textAlign="center" mb={3} fontWeight={600}> */}
+      {/*     Featured Tributes */}
+      {/*   </Typography> */}
+      {/*   <CarouselCards /> */}
+      {/* </Container> */}
 
       {/* ------------------ ABOUT SECTION ------------------ */}
       <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
