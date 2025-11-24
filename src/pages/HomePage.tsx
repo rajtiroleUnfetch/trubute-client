@@ -1,18 +1,17 @@
 // src/App.tsx
 import React from "react";
-import {
-  Typography,
-  Container,
-  Button,
-  Box,
-} from "@mui/material";
+import { Typography, Container, Button, Box } from "@mui/material";
 import MemorialForm from "../components/MemorialForm";
 import ObituaryList from "../components/ObituaryList";
 import CarouselCards from "../components/CarouselCards";
 
 const HomePage: React.FC = () => {
   return (
-    <>
+    <Box
+      sx={{
+        backgroundImage: "url('/images/cathy-mu--6gbnkhFtKo-unsplash.jpg')",
+      }}
+    >
       {/* <HeroSection /> */}
       <MemorialForm />
       <ObituaryList />
@@ -74,7 +73,7 @@ const HomePage: React.FC = () => {
           </Typography>
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
 
