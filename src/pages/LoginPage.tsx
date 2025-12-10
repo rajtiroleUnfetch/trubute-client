@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../api/authApi";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   email: z.string().email(),
@@ -30,6 +31,7 @@ const LoginPage = () => {
     mutation.mutate(data, {
       onSuccess: (res) => {
         login(res);
+        toast.success("Login successful");
         navigate("/");
       },
     });
