@@ -7,7 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignup } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 const schema = z.object({
   fullName: z.string().min(3),
   email: z.string().email(),
@@ -32,9 +32,16 @@ const onSubmit = (data: SignupForm) => {
   };
 
   mutation.mutate(payload, {
-    onSuccess: () => navigate("/login"),
+    onSuccess: () => {
+    toast.success("Signup successful");
+    navigate("/login")
+    },
+    onError: (err:any) => {
+    toast.error(err?.response?.data?.message || "Signup failed");
+    },
   });
 };
+
 
 
   return (
