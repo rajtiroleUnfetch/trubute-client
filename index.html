@@ -1,11 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-XXXXXXXX");
+  </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./public/applogo2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ✅ SEO TITLE -->
     <title>trubute.com</title>
+
+    <link rel="icon" type="image/svg+xml" href="./public/applogo2.png" />
+
+    <!-- ✅ META DESCRIPTION (150 chars) -->
+    <meta
+      name="description"
+      content="Create, share, and preserve beautiful tributes and memorial stories for loved ones. Trubute helps you honor memories forever."
+    />
+
+    <!-- ✅ CANONICAL -->
+    <link rel="canonical" href="https://www.trubute.com/" />
+
+    <!-- ✅ OPEN GRAPH -->
+    <meta
+      property="og:title"
+      content="Create Personalized Tributes & Memorial Stories | Trubute"
+    />
+    <meta
+      property="og:description"
+      content="Create and share meaningful tributes to loved ones with photos, stories, and memories."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.trubute.com/" />
+    <meta property="og:image" content="https://www.trubute.com/og-image.jpg" />
+
+    <!-- ✅ TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Create Personalized Tributes & Memorial Stories | Trubute"
+    />
+    <meta
+      name="twitter:description"
+      content="Honor loved ones by creating personalized memorial stories on Trubute."
+    />
+    <meta name="twitter:image" content="https://www.trubute.com/og-image.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Trubute",
+        "url": "https://www.trubute.com",
+        "logo": "https://www.trubute.com/logo.png",
+        "sameAs": [
+          "https://www.facebook.com/trubute",
+          "https://www.instagram.com/trubute",
+          "https://www.linkedin.com/company/trubute"
+        ]
+      }
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

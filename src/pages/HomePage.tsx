@@ -16,9 +16,12 @@ const HomePage: React.FC = () => {
     >
       {/* <HeroSection /> */}
       <MemorialForm />
-      <ObituaryList />
+
+
+
+      {/* <ObituaryList /> */}
       {/* ------------------ HERO SECTION ------------------ */}
-      <Box
+      {/* <Box
         sx={{
           background: "linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)",
           py: 8,
@@ -46,7 +49,7 @@ const HomePage: React.FC = () => {
             Browse Tributes
           </Button>
         </Container>
-      </Box>
+      </Box> */}
 
       {/* ------------------ FEATURED TRIBUTES (CAROUSEL) ------------------ */}
 
@@ -58,7 +61,7 @@ const HomePage: React.FC = () => {
       {/* </Container> */}
 
       {/* ------------------ ABOUT SECTION ------------------ */}
-      <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
+      {/* <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
         <Container maxWidth="md">
           <Typography
             variant="h4"
@@ -74,7 +77,7 @@ const HomePage: React.FC = () => {
             helping families share tributes and preserve cherished memories.
           </Typography>
         </Container>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

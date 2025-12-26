@@ -34,187 +34,203 @@ import dayjs from "dayjs";
 import { Card, CardContent, Grid } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useCreateMemorial } from "../api/memorialApi";
+import { useCreatePaymentOrder } from "../hooks/useCreatePaymentOrder";
+import { verifyPayment } from "../api/payment";
+import { useAuth } from "../hooks/useAuth";
 
 interface StepThreePlanProps {
   lovedOneForm: any;
 }
 
-const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
-  const plans = [
-    {
-      name: "Basic",
-      price: "Free",
-      subText: "Essential features. Our basic features are always free.",
-      details: ["Essential features", "Basic support", "Memorial website"],
-      type: "free",
-    },
-    {
-      name: "Premium",
-      price: "₹3,999 /yr",
-      subText: "All features. Get full Premium access for a year.",
-      details: [
-        "Everything in Basic",
-        "Custom domain",
-        "Unlimited photos & tributes",
-        "Priority support",
-      ],
-      type: "yearly",
-    },
-    {
-      name: "Lifetime",
-      price: "₹7,999 one-time",
-      subText:
-        "Everything in Premium, forever. Never worry about renewals or losing memories.",
-      details: [
-        "Everything in Premium",
-        "Lifetime hosting",
-        "Permanent access",
-        "Dedicated support",
-      ],
-      type: "lifetime",
-    },
-  ];
+type PlanType = "free" | "yearly" | "lifetime";
 
-  const handleLogData = () => {
-    console.log("📝 Loved One Form Data:", lovedOneForm.getValues());
-    alert("Check console for logged form data!");
+const plans = [
+  {
+    name: "Basic",
+    price: "Free",
+    subText: "Essential features. Our basic features are always free.",
+    details: ["Essential features", "Basic support", "Memorial website"],
+    type: "free" as PlanType,
+  },
+  {
+    name: "Premium",
+    price: "₹3,999 /yr",
+    subText: "All features. Get full Premium access for a year.",
+    details: [
+      "Everything in Basic",
+      "Custom domain",
+      "Unlimited photos & tributes",
+      "Priority support",
+    ],
+    type: "yearly" as PlanType,
+  },
+  {
+    name: "Lifetime",
+    price: "₹7,999 one-time",
+    subText:
+      "Everything in Premium, forever. Never worry about renewals or losing memories.",
+    details: [
+      "Everything in Premium",
+      "Lifetime hosting",
+      "Permanent access",
+      "Dedicated support",
+    ],
+    type: "lifetime" as PlanType,
+  },
+];
+
+const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
+  const { user } = useAuth();
+  const selectedPlanName = lovedOneForm.watch("plan");
+
+  const selectedPlan = plans.find((p) => p.name === selectedPlanName);
+
+  const { mutateAsync: createOrder, isLoading } = useCreatePaymentOrder();
+
+  const handlePayment = async () => {
+    if (!selectedPlan) {
+      alert("Please select a plan");
+      return;
+    }
+
+    // FREE PLAN
+    if (selectedPlan.type === "free") {
+      alert("Free plan activated ❤️");
+      return;
+    }
+
+    try {
+      // CREATE ORDER
+
+
+      const order = await createOrder({
+        planType: selectedPlan.type,
+        userId: user?._id!,
+      });
+       console.log("tempMemorialId", order);
+          
+           localStorage.setItem("tempMemorialId", order?.tempMemorialId);
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "Trubute",
+        description: "Memorial Website Plan",
+        order_id: order.orderId,
+        tempMemorialId:order.tempMemorialId,
+
+        handler: async (response: any) => {
+         
+          await verifyPayment({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          });
+          alert("Payment successful ❤️");
+        },
+
+        theme: {
+          color: "#b68b43",
+        },
+      };
+
+      const razorpay = new (window as any).Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Please try again.");
+    }
   };
 
   return (
     <Box textAlign="center" mt={4}>
-      <Typography
-        variant="h5"
-        fontWeight={600}
-        color="#0b2c52"
-        mb={3}
-        textAlign="center"
-      >
+      <Typography variant="h5" fontWeight={600} mb={3} color="#0b2c52">
         Choose Your Payment Plan
       </Typography>
 
       <Controller
         name="plan"
         control={lovedOneForm.control}
-        defaultValue=""
+        rules={{ required: "Please select a plan" }}
         render={({ field }) => (
-          <Grid
-            container
-            spacing={3}
-            justifyContent="center"
-            alignItems="stretch"
-          >
-            {plans.map((plan) => (
-              <Grid key={plan.name}>
-                <Card
-                  elevation={field.value === plan.name ? 6 : 2}
-                  onClick={() => field.onChange(plan.name)}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "100%",
-                    cursor: "pointer",
-                    borderRadius: 3,
-                    border:
-                      field.value === plan.name
+          <Grid container spacing={3} justifyContent="center">
+            {plans.map((plan) => {
+              const isSelected = field.value === plan.name;
+
+              return (
+                <Grid key={plan.name}>
+                  <Card
+                    onClick={() => field.onChange(plan.name)}
+                    elevation={isSelected ? 6 : 2}
+                    sx={{
+                      width: 280,
+                      cursor: "pointer",
+                      borderRadius: 3,
+                      border: isSelected
                         ? "2px solid #b68b43"
                         : "1px solid #c5d3e0",
-                    transition: "0.3s",
-                    "&:hover": {
-                      borderColor: "#b68b43",
-                      transform: "translateY(-4px)",
-                      boxShadow: "0 6px 14px rgba(0,0,0,0.08)",
-                    },
-                  }}
-                >
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography
-                      variant="h6"
-                      color="#0b2c52"
-                      fontWeight={700}
-                      mb={1}
-                    >
-                      {plan.name}
-                    </Typography>
-
-                    <Typography
-                      variant="h5"
-                      color={plan.type === "free" ? "#0b2c52" : "#b68b43"}
-                      fontWeight={700}
-                      mb={1}
-                    >
-                      {plan.price}
-                    </Typography>
-
-                    {plan.type === "yearly" && (
-                      <Typography variant="body2" color="text.secondary" mb={1}>
-                        Renews annually
+                      transition: "0.3s",
+                      "&:hover": {
+                        borderColor: "#b68b43",
+                        transform: "translateY(-4px)",
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6" fontWeight={700}>
+                        {plan.name}
                       </Typography>
-                    )}
 
-                    {plan.type === "lifetime" && (
-                      <Typography variant="body2" color="text.secondary" mb={1}>
-                        One-time payment
+                      <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color={plan.type === "free" ? "#0b2c52" : "#b68b43"}
+                        my={1}
+                      >
+                        {plan.price}
                       </Typography>
-                    )}
 
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      mb={2}
-                      minHeight={50}
-                    >
-                      {plan.subText}
-                    </Typography>
+                      <Typography variant="body2" color="text.secondary" mb={2}>
+                        {plan.subText}
+                      </Typography>
 
-                    <Stack spacing={1} alignItems="flex-start" mb={2}>
-                      {plan.details.map((item) => (
-                        <Stack
-                          key={item}
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                        >
-                          <CheckCircleIcon
-                            sx={{ color: "#b68b43", fontSize: 18 }}
-                          />
-                          <Typography variant="body2">{item}</Typography>
-                        </Stack>
-                      ))}
-                    </Stack>
-                  </CardContent>
-
-                  <Box sx={{ p: 2 }}>
-                    <Button
-                      fullWidth
-                      variant={
-                        field.value === plan.name ? "contained" : "outlined"
-                      }
-                      onClick={() => field.onChange(plan.name)}
-                      sx={{
-                        borderRadius: 2,
-                        py: 1,
-                        fontWeight: 600,
-                        color: field.value === plan.name ? "#fff" : "#0b2c52",
-                        backgroundColor:
-                          field.value === plan.name ? "#b68b43" : "#fff",
-                        borderColor:
-                          field.value === plan.name ? "#b68b43" : "#c5d3e0",
-                        "&:hover": {
-                          backgroundColor:
-                            field.value === plan.name ? "#a17837" : "#f1f3f5",
-                        },
-                      }}
-                    >
-                      {field.value === plan.name ? "Selected" : "Select"}
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
-            ))}
+                      <Stack spacing={1} alignItems="flex-start">
+                        {plan.details.map((item) => (
+                          <Stack key={item} direction="row" spacing={1}>
+                            <CheckCircleIcon
+                              sx={{ color: "#b68b43", fontSize: 18 }}
+                            />
+                            <Typography variant="body2">{item}</Typography>
+                          </Stack>
+                        ))}
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         )}
       />
+
+      {/* CONTINUE / PAY BUTTON */}
+      <Box mt={4}>
+        <Button
+          size="large"
+          variant="contained"
+          onClick={handlePayment}
+          sx={{
+            px: 6,
+            py: 1.5,
+            fontWeight: 600,
+            borderRadius: 2,
+            backgroundColor: "#b68b43",
+            "&:hover": { backgroundColor: "#a17837" },
+          }}
+        >
+          {selectedPlan?.type === "free" ? "Continue" : "Pay Now"}
+        </Button>
+      </Box>
 
       {lovedOneForm.formState.errors.plan && (
         <Typography color="error" mt={2}>
@@ -236,10 +252,14 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
   const handleSubmit = () => {
     const data = lovedOneForm.getValues();
 
+    let tempMemorialId = localStorage.getItem("tempMemorialId");
+
+    console.log('temp',tempMemorialId);
+    
     // Construct payload
     const payload = {
       ...data,
-      createdBy: "670f0c8b1234567890abcdef", // Replace with logged-in user id
+      tempMemorialId,
     };
 
     // Send to backend
@@ -1062,8 +1082,6 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
                       />
                     )}
                   />
-
-
                 </Stack>
 
                 {/* --- Born Section --- */}

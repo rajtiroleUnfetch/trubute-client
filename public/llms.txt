@@ -1,0 +1,4 @@
+site: Trubute
+url: https://www.trubute.com
+description: Platform for creating and sharing memorial tributes.
+owner: Trubute
