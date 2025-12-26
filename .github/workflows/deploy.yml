@@ -22,6 +22,8 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build Project (ignore errors)
+        env:
+          VITE_RAZORPAY_KEY_ID: ${{ secrets.VITE_RAZORPAY_KEY_ID }}
         run: |
           echo "Starting Vite build..."
           CI=false npm run build || echo "⚠️ Build failed but continuing deployment"
