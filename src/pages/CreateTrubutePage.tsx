@@ -22,7 +22,7 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { Divider, TextField } from "@mui/material";
-import XIcon from '@mui/icons-material/X';
+import XIcon from "@mui/icons-material/X";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Controller, useForm } from "react-hook-form";
 import type { Control, FieldErrors } from "react-hook-form";
@@ -86,7 +86,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
 
   const selectedPlan = plans.find((p) => p.name === selectedPlanName);
 
-const { mutateAsync: createOrder } = useCreatePaymentOrder();
+  const { mutateAsync: createOrder } = useCreatePaymentOrder();
 
   const handlePayment = async () => {
     if (!selectedPlan) {
@@ -103,14 +103,13 @@ const { mutateAsync: createOrder } = useCreatePaymentOrder();
     try {
       // CREATE ORDER
 
-
       const order = await createOrder({
         planType: selectedPlan.type,
         userId: user?._id!,
       });
-       console.log("tempMemorialId", order);
-          
-           localStorage.setItem("tempMemorialId", order?.tempMemorialId);
+      console.log("tempMemorialId", order);
+
+      localStorage.setItem("tempMemorialId", order?.tempMemorialId);
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -118,10 +117,9 @@ const { mutateAsync: createOrder } = useCreatePaymentOrder();
         name: "Trubute",
         description: "Memorial Website Plan",
         order_id: order.orderId,
-        tempMemorialId:order.tempMemorialId,
+        tempMemorialId: order.tempMemorialId,
 
         handler: async (response: any) => {
-         
           await verifyPayment({
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
@@ -255,8 +253,8 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
 
     let tempMemorialId = localStorage.getItem("tempMemorialId");
 
-    console.log('temp',tempMemorialId);
-    
+    console.log("temp", tempMemorialId);
+
     // Construct payload
     const payload = {
       ...data,
@@ -500,51 +498,50 @@ export const CreateTributePage: React.FC = () => {
   const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
   const handleNext = () => setActiveStep((prev) => prev + 1);
 
-const loginMutation = useLogin();
-const signupMutation = useSignup();
+  const loginMutation = useLogin();
+  const signupMutation = useSignup();
 
-const handleSignup = (data: SignupFormData) => {
-  signupMutation.mutate(
-    {
-      name: `${data.firstName} ${data.lastName}`,
-      email: data.email,
-      password: data.password,
-    },
-    {
-      onSuccess: (res) => {
-        localStorage.setItem("token", res.token);
-        setActiveStep(1);
+  const handleSignup = (data: SignupFormData) => {
+    signupMutation.mutate(
+      {
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        password: data.password,
       },
-      onError: (err: any) => {
-        alert(err?.response?.data?.message || "Signup failed");
+      {
+        onSuccess: (res) => {
+          localStorage.setItem("token", res.token);
+          setActiveStep(1);
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.message || "Signup failed");
+        },
       },
-    }
-  );
-};
+    );
+  };
 
-const handleLogin = (data: SignupFormData) => {
-  loginMutation.mutate(
-    {
-      email: data.email,
-      password: data.password,
-    },
-    {
-      onSuccess: (res) => {
-        localStorage.setItem("token", res.token);
-        setActiveStep(1);
+  const handleLogin = (data: SignupFormData) => {
+    loginMutation.mutate(
+      {
+        email: data.email,
+        password: data.password,
       },
-      onError: (err: any) => {
-        alert(err?.response?.data?.message || "Login failed");
+      {
+        onSuccess: (res) => {
+          localStorage.setItem("token", res.token);
+          setActiveStep(1);
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.message || "Login failed");
+        },
       },
-    }
-  );
-};
+    );
+  };
 
   const handleLovedOneSubmit = (data: LovedOneFormData) => {
     console.log("✅ Loved one data:", data);
     setActiveStep(2);
   };
-
 
   return (
     <Box
@@ -671,9 +668,7 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
         >
           {/* -------- SOCIAL LOGIN -------- */}
           <Stack spacing={2} flex={1} alignItems="center">
-            <Typography variant="body1">
-              Use your social profile:
-            </Typography>
+            <Typography variant="body1">Use your social profile:</Typography>
 
             <Button
               variant="contained"
@@ -822,9 +817,7 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
               textAlign="center"
               sx={{ mt: 1.5, color: "text.secondary" }}
             >
-              {isSignup
-                ? "Already have an account?"
-                : "Don’t have an account?"}{" "}
+              {isSignup ? "Already have an account?" : "Don’t have an account?"}{" "}
               <Box
                 component="span"
                 sx={{
