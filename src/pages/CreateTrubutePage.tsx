@@ -1,3 +1,4 @@
+import { useLogin, useSignup } from "../api/authApi";
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -21,7 +22,7 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { Divider, TextField } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from '@mui/icons-material/X';
 import GoogleIcon from "@mui/icons-material/Google";
 import { Controller, useForm } from "react-hook-form";
 import type { Control, FieldErrors } from "react-hook-form";
@@ -94,7 +95,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
 
   const selectedPlan = plans.find((p) => p.name === selectedPlanName);
 
-  const { mutateAsync: createOrder, isLoading } = useCreatePaymentOrder();
+const { mutateAsync: createOrder } = useCreatePaymentOrder();
 
   const handlePayment = async () => {
     if (!selectedPlan) {
@@ -508,15 +509,51 @@ export const CreateTributePage: React.FC = () => {
   const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
   const handleNext = () => setActiveStep((prev) => prev + 1);
 
-  const handleSignupSubmit = (data: SignupFormData) => {
-    console.log("✅ Signup data:", data);
-    setActiveStep(1);
-  };
+const loginMutation = useLogin();
+const signupMutation = useSignup();
+
+const handleSignup = (data: SignupFormData) => {
+  signupMutation.mutate(
+    {
+      name: `${data.firstName} ${data.lastName}`,
+      email: data.email,
+      password: data.password,
+    },
+    {
+      onSuccess: (res) => {
+        localStorage.setItem("token", res.token);
+        setActiveStep(1);
+      },
+      onError: (err: any) => {
+        alert(err?.response?.data?.message || "Signup failed");
+      },
+    }
+  );
+};
+
+const handleLogin = (data: SignupFormData) => {
+  loginMutation.mutate(
+    {
+      email: data.email,
+      password: data.password,
+    },
+    {
+      onSuccess: (res) => {
+        localStorage.setItem("token", res.token);
+        setActiveStep(1);
+      },
+      onError: (err: any) => {
+        alert(err?.response?.data?.message || "Login failed");
+      },
+    }
+  );
+};
 
   const handleLovedOneSubmit = (data: LovedOneFormData) => {
     console.log("✅ Loved one data:", data);
     setActiveStep(2);
   };
+
 
   return (
     <Box
@@ -559,7 +596,8 @@ export const CreateTributePage: React.FC = () => {
             <StepOneSignup
               control={signupForm.control}
               errors={signupForm.formState.errors}
-              onSubmit={signupForm.handleSubmit(handleSignupSubmit)}
+              onSignup={handleSignup}
+              onLogin={handleLogin}
             />
           )}
 
@@ -607,19 +645,31 @@ export const CreateTributePage: React.FC = () => {
 interface StepOneSignupProps {
   control: Control<SignupFormData>;
   errors: FieldErrors<SignupFormData>;
-  onSubmit: () => void;
+  onSignup: (data: SignupFormData) => void;
+  onLogin: (data: SignupFormData) => void;
 }
 
 const StepOneSignup: React.FC<StepOneSignupProps> = ({
   control,
   errors,
-  onSubmit,
+  onSignup,
+  onLogin,
 }) => {
+  const [isSignup, setIsSignup] = useState(true);
+
+  const handleFormSubmit = (data: SignupFormData) => {
+    if (isSignup) {
+      onSignup(data);
+    } else {
+      onLogin(data);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={control.handleSubmit(handleFormSubmit)}>
       <Stack spacing={3}>
-        <Typography variant="h5" textAlign="center">
-          Sign in or Create an Account
+        <Typography variant="h5" textAlign="center" fontWeight={600}>
+          {isSignup ? "Create an Account" : "Sign In"}
         </Typography>
 
         <Stack
@@ -628,36 +678,55 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
           alignItems="center"
           justifyContent="space-between"
         >
+          {/* -------- SOCIAL LOGIN -------- */}
           <Stack spacing={2} flex={1} alignItems="center">
-            <Typography variant="body1">Use your social profile:</Typography>
+            <Typography variant="body1">
+              Use your social profile:
+            </Typography>
+
             <Button
               variant="contained"
-              startIcon={<FacebookIcon />}
+              startIcon={<XIcon />}
               fullWidth
               sx={{
-                backgroundColor: "#1877f2",
-                "&:hover": { backgroundColor: "#145dbf" },
+                backgroundColor: "#000",
+                "&:hover": { backgroundColor: "#1a1a1a" },
                 borderRadius: 2,
                 py: 1.2,
-                fontWeight: 500,
+                fontWeight: 600,
                 maxWidth: 280,
+                textTransform: "none",
+              }}
+              onClick={() => {
+                // later: X OAuth
+                // after success -> set token -> move step
               }}
             >
-              Sign in with Facebook
+              Continue with X
             </Button>
+
             <Button
               variant="outlined"
               startIcon={<GoogleIcon />}
               fullWidth
               sx={{
-                borderColor: "#dadce0",
+                backgroundColor: "#fff",
+                color: "#1a73e8",
+                borderColor: "#d2d6dc",
                 borderRadius: 2,
-                py: 1.2,
-                fontWeight: 500,
+                py: 1.3,
+                fontWeight: 600,
                 maxWidth: 280,
+                textTransform: "none",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                "&:hover": {
+                  backgroundColor: "#f8f9fa",
+                  borderColor: "#c6cacf",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                },
               }}
             >
-              Sign in with Google
+              Continue with Google
             </Button>
           </Stack>
 
@@ -671,38 +740,45 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
             }}
           />
 
+          {/* -------- MANUAL FORM -------- */}
           <Stack spacing={2} flex={1} sx={{ width: "100%", maxWidth: 350 }}>
-            <Typography variant="body1">Or sign up manually:</Typography>
+            <Typography variant="body1">
+              {isSignup ? "Or sign up manually:" : "Or sign in with email:"}
+            </Typography>
 
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="First name"
-                  size="small"
-                  fullWidth
-                  error={!!errors.firstName}
-                  helperText={errors.firstName?.message}
+            {isSignup && (
+              <>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="First name"
+                      size="small"
+                      fullWidth
+                      error={!!errors.firstName}
+                      helperText={errors.firstName?.message}
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Controller
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Last name"
-                  size="small"
-                  fullWidth
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Last name"
+                      size="small"
+                      fullWidth
+                      error={!!errors.lastName}
+                      helperText={errors.lastName?.message}
+                    />
+                  )}
                 />
-              )}
-            />
+              </>
+            )}
 
             <Controller
               name="email"
@@ -743,12 +819,34 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
                 backgroundColor: "#b68b43",
                 borderRadius: 2,
                 py: 1.2,
-                fontWeight: 500,
+                fontWeight: 600,
                 "&:hover": { backgroundColor: "#a17837" },
               }}
             >
-              Continue
+              {isSignup ? "Create Account" : "Sign In"}
             </Button>
+
+            <Typography
+              variant="body2"
+              textAlign="center"
+              sx={{ mt: 1.5, color: "text.secondary" }}
+            >
+              {isSignup
+                ? "Already have an account?"
+                : "Don’t have an account?"}{" "}
+              <Box
+                component="span"
+                sx={{
+                  color: "#b68b43",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  "&:hover": { textDecoration: "underline" },
+                }}
+                onClick={() => setIsSignup(!isSignup)}
+              >
+                {isSignup ? "Sign in" : "Create account"}
+              </Box>
+            </Typography>
           </Stack>
         </Stack>
       </Stack>
@@ -1302,4 +1400,4 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
   );
 };
 
-export default StepTwoLovedOne;
+export default CreateTributePage;
