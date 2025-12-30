@@ -27,9 +27,9 @@ const MemoryTabs: React.FC<MemoryTabsProps> = ({ firstName, lastName }) => {
       <div className="flex bg-[#D4B58B] rounded-t-lg overflow-hidden">
         {tabs.map((tab) => (
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 font-semibold text-center transition-all duration-200 ${activeTab === tab.id
+            key={tab?.id}
+            onClick={() => setActiveTab(tab?.id)}
+  className={`flex-1 py-3 font-semibold text-center transition-all duration-200 ${activeTab === tab?.id
               ? "bg-[#FFFBF5] text-[#372E29]"
               : "bg-[#C5A67B] text-[#502A12]"
               }`}

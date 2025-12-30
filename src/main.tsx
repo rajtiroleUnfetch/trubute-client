@@ -5,7 +5,7 @@ import App from "./App";
 import "./index.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "@fontsource/merriweather";
+// import "@fontsource/merriweather";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";

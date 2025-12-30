@@ -37,7 +37,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
   const { user } = useAuth();
   console.log(user,'user')
   console.log(memorial,'memorial')
-  const isUser=user.id===memorial.createdBy
+  const isUser=user?.id===memorial?.createdBy
   const uploadPhoto = async () => {
     if (!photoFile) return alert("Please select a photo");
 

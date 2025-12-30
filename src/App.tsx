@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import MainLayout from "./pages/MainLayout";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import TributePage from "./pages/TributePage";
 
 function App() {
   return (
@@ -61,7 +62,7 @@ function App() {
         path="/memorial/:website"
         element={
           <MainLayout>
-            <MemorialPage />
+            <TributePage />
           </MainLayout>
         }
       />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import { Box } from "@mui/material";
 
 function TributePage() {
   const [activeTab, setActiveTab] = useState("ABOUT");
@@ -9,13 +10,13 @@ function TributePage() {
       {/* TOP HEADER */}
       <div className="h-16 flex items-center justify-between px-6 bg-white border-b border-gray-200">
         <div className="text-red-800 text-xl font-medium">TRIBUTE</div>
-
+<Box  className="text-red-800 text-xl font-medium">fasdf</Box>
         <div className="flex space-x-6 text-gray-600 text-sm">
           <div className="hover:text-red-800 cursor-pointer">SIGN IN</div>
           <div className="hover:text-red-800 cursor-pointer">INVITE OTHERS</div>
-          <div className="hover:text-red-800 cursor-pointer">
+          {/* <div className="hover:text-red-800 cursor-pointer">
             CREATE A NEW WEBSITE
-          </div>
+          </div> */}
           <div className="hover:text-red-800 cursor-pointer">
             CONTACT SUPPORT
           </div>
@@ -319,7 +320,7 @@ function TributePage() {
         )}
       </div>
     </>
-  );
+  );  
 }
 
 export default TributePage;
