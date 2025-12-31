@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   },
 });
 
-// ✅ Optional: Add token to every request (if using auth)
+// ✅ Optional: Add token to every request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
