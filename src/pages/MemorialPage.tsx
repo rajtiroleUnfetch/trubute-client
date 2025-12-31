@@ -85,7 +85,7 @@ const MemorialFullPage = () => {
         <MemorialHero memorial={memorial} />
         <MemorialTabs memorial={memorial} tributes={memorial?.tributes || []} />
 
-        <Typography textAlign="center" sx={{ color: "gray", mt: 1 }}>
+        <Typography textAlign="center" sx={{ color: "neutral", mt: 1 }}>
           Created on {new Date(memorial?.createdAt).toLocaleDateString()}
         </Typography>
 

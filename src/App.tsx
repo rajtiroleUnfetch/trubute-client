@@ -62,7 +62,7 @@ function App() {
         path="/memorial/:website"
         element={
           <MainLayout>
-            <TributePage />
+            <MemorialPage />
           </MainLayout>
         }
       />

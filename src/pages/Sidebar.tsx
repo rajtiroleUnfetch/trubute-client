@@ -5,8 +5,8 @@ function Sidebar() {
   return (
     <div className="w-full md:w-1/3 space-y-6">
       {/* INVITE CARD */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <h3 className="text-sm font-semibold text-gray-800 mb-2">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <h3 className="text-sm font-semibold text-neutral-800 mb-2">
           Invite DOCTOR VELMA’S family and friends
         </h3>
 
@@ -20,7 +20,7 @@ function Sidebar() {
       </div>
 
       {/* SHARE FACEBOOK */}
-      <div className="bg-white border border-gray-200 rounded-md p-4 flex items-center justify-center">
+      <div className="bg-white border border-neutral-200 rounded-md p-4 flex items-center justify-center">
         <Button
           variant="text"
           startIcon={<TwitterIcon />}
@@ -31,12 +31,12 @@ function Sidebar() {
       </div>
 
       {/* NOTIFICATION PREFERENCES */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <h3 className="text-sm font-semibold text-gray-800 mb-1">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <h3 className="text-sm font-semibold text-neutral-800 mb-1">
           Notification preferences
         </h3>
 
-        <p className="text-xs text-gray-500 mb-3">You are not subscribed</p>
+        <p className="text-xs text-neutral-500 mb-3">You are not subscribed</p>
 
         <Button fullWidth variant="outlined" className="normal-case">
           Subscribe
@@ -44,8 +44,8 @@ function Sidebar() {
       </div>
 
       {/* PHOTOS PREVIEW */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <h3 className="text-sm font-semibold text-gray-800 mb-3">17 Photos</h3>
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <h3 className="text-sm font-semibold text-neutral-800 mb-3">17 Photos</h3>
 
         <img
           src="/images/test.png"
@@ -59,21 +59,21 @@ function Sidebar() {
       </div>
 
       {/* RECENT UPDATES */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <h3 className="text-sm font-semibold text-gray-800 mb-3">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <h3 className="text-sm font-semibold text-neutral-800 mb-3">
           Recent updates
         </h3>
 
-        <p className="text-xs text-gray-500 mb-1">Thursday, October 16</p>
+        <p className="text-xs text-neutral-500 mb-1">Thursday, October 16</p>
 
-        <p className="text-sm text-gray-700">
+        <p className="text-sm text-neutral-700">
           Association of General Practitioners of Jamaica added 2 stories.
         </p>
       </div>
 
       {/* ADMIN INFO */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <p className="text-xs text-gray-600">
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <p className="text-xs text-neutral-600">
           This website is administered by:
         </p>
 
@@ -83,10 +83,10 @@ function Sidebar() {
       </div>
 
       {/* VIEWS */}
-      <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-        <p className="text-sm text-gray-700 font-medium">2,626 Views</p>
+      <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4">
+        <p className="text-sm text-neutral-700 font-medium">2,626 Views</p>
 
-        <p className="text-xs text-gray-500 mt-1">Open access</p>
+        <p className="text-xs text-neutral-500 mt-1">Open access</p>
       </div>
 
       {/* FOOTER LINK */}
