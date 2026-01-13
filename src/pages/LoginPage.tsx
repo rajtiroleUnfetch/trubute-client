@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../api/authApi";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   email: z.string().email(),
@@ -30,13 +31,14 @@ const LoginPage = () => {
     mutation.mutate(data, {
       onSuccess: (res) => {
         login(res);
+        toast.success("Login successful");
         navigate("/");
       },
     });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-100">
       <Card className="max-w-md w-full shadow-lg">
         <CardContent>
 

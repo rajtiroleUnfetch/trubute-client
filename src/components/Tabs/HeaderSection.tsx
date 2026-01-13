@@ -9,7 +9,7 @@ const HeaderSection: React.FC<HeaderProps> = ({ firstName, lastName }) => {
   return (
     <header className="w-full">
       {/* 🔹 Top Navigation Bar */}
-      <div className="w-full bg-[#f5f7f8]/90 backdrop-blur-sm border-b border-gray-300">
+      <div className="w-full bg-[#f5f7f8]/90 backdrop-blur-sm border-b border-neutral-300">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
           {/* Left: Logo */}
           <div className="flex items-center space-x-2">

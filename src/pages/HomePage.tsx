@@ -8,16 +8,21 @@ import {
 } from "@mui/material";
 import MemorialForm from "../components/MemorialForm";
 import ObituaryList from "../components/ObituaryList";
+// import CarouselCards from "../components/CarouselCards";
 import CarouselCards from "../components/CarouselCards";
+import FeaturedTributes from "../components/FeaturedTributes";
 
 const HomePage: React.FC = () => {
   return (
     <>
       {/* <HeroSection /> */}
       <MemorialForm />
-      <ObituaryList />
+
+
+
+      {/* <ObituaryList /> */}
       {/* ------------------ HERO SECTION ------------------ */}
-      <Box
+      {/* <Box
         sx={{
           background: "linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)",
           py: 8,
@@ -45,7 +50,7 @@ const HomePage: React.FC = () => {
             Browse Tributes
           </Button>
         </Container>
-      </Box>
+      </Box> */}
 
       {/* ------------------ FEATURED TRIBUTES (CAROUSEL) ------------------ */}
 
@@ -57,7 +62,7 @@ const HomePage: React.FC = () => {
       </Container>
 
       {/* ------------------ ABOUT SECTION ------------------ */}
-      <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
+      {/* <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
         <Container maxWidth="md">
           <Typography
             variant="h4"
@@ -73,8 +78,8 @@ const HomePage: React.FC = () => {
             helping families share tributes and preserve cherished memories.
           </Typography>
         </Container>
-      </Box>
-    </>
+      </Box> */}
+    </Box>
   );
 };
 
