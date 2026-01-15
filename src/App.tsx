@@ -42,6 +42,8 @@ function App() {
       {/* Tribute creation flow */}
       {/* <Route path="/create-memorial" element={<CreateMemorialFor />} /> */}
       <Route path="/create-trubute" element={<CreateTributePage />} />
+      <Route path="/memorial/:website" element={ <MainLayout>
+        <MemorialPage /></MainLayout>} />
       <Route
         path="/about"
         element={

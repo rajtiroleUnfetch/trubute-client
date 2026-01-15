@@ -1,6 +1,11 @@
 // src/App.tsx
 import React from "react";
-import { Typography, Container, Button, Box } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  Box,
+} from "@mui/material";
 import MemorialForm from "../components/MemorialForm";
 import ObituaryList from "../components/ObituaryList";
 // import CarouselCards from "../components/CarouselCards";
@@ -9,11 +14,7 @@ import FeaturedTributes from "../components/FeaturedTributes";
 
 const HomePage: React.FC = () => {
   return (
-    <Box
-      sx={{
-        backgroundImage: "url('/images/cathy-mu--6gbnkhFtKo-unsplash.jpg')",
-      }}
-    >
+    <>
       {/* <HeroSection /> */}
       <MemorialForm />
 
@@ -53,12 +54,12 @@ const HomePage: React.FC = () => {
 
       {/* ------------------ FEATURED TRIBUTES (CAROUSEL) ------------------ */}
 
-      {/* <Container sx={{ py: 6 }}> */}
-      {/*   <Typography variant="h4" textAlign="center" mb={3} fontWeight={600}> */}
-      {/*     Featured Tributes */}
-      {/*   </Typography> */}
-      {/*   <CarouselCards /> */}
-      {/* </Container> */}
+      <Container sx={{ py: 6 }}>
+        <Typography variant="h4" textAlign="center" mb={3} fontWeight={600}>
+          Featured Tributes
+        </Typography>
+        <CarouselCards />
+      </Container>
 
       {/* ------------------ ABOUT SECTION ------------------ */}
       {/* <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>
