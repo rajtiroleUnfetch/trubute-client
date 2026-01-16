@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast"
 import {
   Box,
   Button,
@@ -18,7 +19,7 @@ const MemorialForm: React.FC = () => {
 
   const handleSubmit = () => {
     if (!firstName || !lastName) {
-      alert("Please enter both first and last names.");
+      toast.error("Please enter both first and last names.");
       return;
     }
     // Navigate with query params

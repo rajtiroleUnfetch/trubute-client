@@ -12,6 +12,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Search, Tune } from "@mui/icons-material";
+import toast from "react-hot-toast";
 
 const HeroSection: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,7 +20,7 @@ const HeroSection: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Searching for: ${firstName} ${lastName}`);
+    toast.success(`Searching for: ${firstName} ${lastName}`);
   };
 
   return (

@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 import React, { useState } from "react";
 
 type AboutProps = {
@@ -17,7 +17,7 @@ const AboutSection: React.FC<AboutProps> = ({ firstName, lastName, onPublishTrib
     // demo fallback
     if (!onPublishTribute) {
       console.log("Tribute published:", { text: t });
-      alert("Tribute published (demo). Open console to see payload.");
+      toast.success("Tribute published (demo). Open console to see payload.");
     }
     setText("");
   };

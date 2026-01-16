@@ -21,6 +21,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import theme from "../theme";
 import { useNavigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
@@ -35,7 +36,7 @@ const Navbar = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Searching for: ${search}`);
+    toast.success(`Searching for: ${search}`);
   };
 
   const handleProfileClick = (event: any) => {

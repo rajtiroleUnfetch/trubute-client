@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import {
   Box,
   Button,
@@ -89,13 +90,13 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
 
   const handlePayment = async () => {
     if (!selectedPlan) {
-      alert("Please select a plan");
+      toast.error("Please select a plan");
       return;
     }
 
     // FREE PLAN
     if (selectedPlan.type === "free") {
-      alert("Free plan activated ❤️");
+      toast.success("Free plan activated ❤️");
       return;
     }
 
@@ -126,7 +127,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
           });
-          alert("Payment successful ❤️");
+          toast.success("Payment successful ❤️");
         },
 
         theme: {
@@ -138,7 +139,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
       razorpay.open();
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment failed. Please try again.");
+      toast.error("Payment failed. Please try again.");
     }
   };
 
@@ -268,12 +269,12 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
         console.log("✅ Memorial created:", res.memorial);
 
         const website = data.website.trim().toLowerCase();
-        alert("🎉 Memorial created successfully!");
+        toast.success("🎉 Memorial created successfully!");
         navigate(`/memorial/${website}`);
       },
       onError: (err: any) => {
         console.error("❌ Error creating memorial:", err);
-        alert(err?.response?.data?.message || "Something went wrong!");
+        toast.success(err?.response?.data?.message || "Something went wrong!");
       },
     });
   };

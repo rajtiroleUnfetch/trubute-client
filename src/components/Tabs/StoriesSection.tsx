@@ -1,5 +1,5 @@
 
-
+import toast from "react-hot-toast";
 import React, { useRef, useState } from "react";
 
 type StoriesProps = {
@@ -36,7 +36,7 @@ const StoriesSection: React.FC<StoriesProps> = ({ firstName, lastName, onPublish
       onPublishStory(payload);
     } else {
       console.log("Story published:", payload);
-      alert("Story published (demo). Console me payload dekho.");
+      toast.success("Story published (demo). Console me payload dekho.");
     }
 
     // reset

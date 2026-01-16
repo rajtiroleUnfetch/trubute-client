@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 import React, { useRef, useState } from "react";
 
 type LifeProps = {
@@ -33,7 +33,7 @@ const LifeSection: React.FC<LifeProps> = ({ firstName, lastName, onPublishLife }
       onPublishLife(payload);
     } else {
       console.log("Life chapter published:", payload);
-      alert("Life chapter published (demo). Check console.");
+      toast.success("Life chapter published (demo). Check console.");
     }
 
     setTitle("");

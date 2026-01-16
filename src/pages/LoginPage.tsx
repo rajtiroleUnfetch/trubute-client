@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Card, CardContent, TextField, Button, Typography, Alert, CircularProgress
+  Card, CardContent, TextField, Button, Typography, CircularProgress
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { useForm } from "react-hook-form";
@@ -34,6 +34,9 @@ const LoginPage = () => {
         toast.success("Login successful");
         navigate("/");
       },
+      onError:(err:any)=>{
+        toast.error(err?.response?.data?.message || "Login failed");
+      }
     });
   };
 
@@ -44,11 +47,11 @@ const LoginPage = () => {
 
           <Typography variant="h5" align="center">Login</Typography>
 
-          {mutation.isError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {(mutation.error as any)?.response?.data?.message || "Login failed"}
-            </Alert>
-          )}
+          {/* {mutation.isError && ( */}
+          {/*   <Alert severity="error" sx={{ mt: 2 }}> */}
+          {/*     {(mutation.error as any)?.response?.data?.message || "Login failed"} */}
+          {/*   </Alert> */}
+          {/* )} */}
 
           <form onSubmit={handleSubmit(onSubmit)}>
 

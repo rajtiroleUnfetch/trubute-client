@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Card, CardContent, TextField, Button, Typography, Alert, CircularProgress
+  Card, CardContent, TextField, Button, Typography, CircularProgress
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -51,11 +51,11 @@ const onSubmit = (data: SignupForm) => {
 
           <Typography variant="h5" align="center">Create Account</Typography>
 
-          {mutation.isError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {(mutation.error as any)?.response?.data?.message || "Signup failed"}
-            </Alert>
-          )}
+          {/* {mutation.isError && ( */}
+          {/*   <Alert severity="error" sx={{ mt: 2 }}> */}
+          {/*     {(mutation.error as any)?.response?.data?.message || "Signup failed"} */}
+          {/*   </Alert> */}
+          {/* )} */}
 
           <form onSubmit={handleSubmit(onSubmit)}>
 
