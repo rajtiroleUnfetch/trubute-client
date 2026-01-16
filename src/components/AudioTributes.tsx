@@ -9,6 +9,7 @@
     import axiosInstance from "../api/axiosInstance";
     import { useAuth } from "../hooks/useAuth";
     import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+    import toast from "react-hot-toast";
 
     interface AudioTributesProps {
     memorialId: string;
@@ -92,7 +93,7 @@
         if (!file) return;
 
         if (!file.type.startsWith("audio")) {
-        alert("Only audio files are allowed!");
+        toast.error("Only audio files are allowed!");
         return;
         }
 

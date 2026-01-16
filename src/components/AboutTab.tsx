@@ -124,6 +124,7 @@
 // };
 
 // export default AboutTab;
+import toast from "react-hot-toast";
 import { useState } from "react";
 import {
   Box,
@@ -163,7 +164,7 @@ const AboutTab = ({ memorial, reloadMemorial }: any) => {
       reloadMemorial(); // refresh data after update
     } catch (err) {
       console.error(err);
-      alert("Update failed");
+      toast.error("Update failed");
     }
   };
 

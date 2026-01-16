@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { 
-  Box, 
-  Button, 
-  Container, 
-  TextField, 
-  Typography, 
-  Paper, 
-  Stack 
+import toast from "react-hot-toast"
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  Stack,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +19,7 @@ const MemorialForm: React.FC = () => {
 
   const handleSubmit = () => {
     if (!firstName || !lastName) {
-      alert("Please enter both first and last names.");
+      toast.error("Please enter both first and last names.");
       return;
     }
     // Navigate with query params

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -39,7 +40,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
   console.log(memorial,'memorial')
   const isUser=user?.id===memorial?.createdBy
   const uploadPhoto = async () => {
-    if (!photoFile) return alert("Please select a photo");
+    if (!photoFile) return toast.error("Please select a photo");
 
     const formData = new FormData();
     formData.append("media", photoFile);
