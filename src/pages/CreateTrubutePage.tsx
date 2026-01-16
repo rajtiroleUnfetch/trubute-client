@@ -1,3 +1,4 @@
+import { useLogin, useSignup } from "../api/authApi";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import {
@@ -22,10 +23,14 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { Divider, TextField } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Controller, useForm } from "react-hook-form";
-import type { Control, FieldErrors } from "react-hook-form";
+import type {
+  Control,
+  FieldErrors,
+  UseFormHandleSubmit,
+} from "react-hook-form";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -41,52 +46,73 @@ import { useAuth } from "../hooks/useAuth";
 
 interface StepThreePlanProps {
   lovedOneForm: any;
+  setActiveStep: any;
+  isPaymentCompleted: any;
+  setIsPaymentCompleted: any;
 }
 
 type PlanType = "free" | "yearly" | "lifetime";
 
 const plans = [
   {
-    name: "Basic",
+    name: "Free Trial",
+    id: "Free",
     price: "Free",
-    subText: "Essential features. Our basic features are always free.",
-    details: ["Essential features", "Basic support", "Memorial website"],
+    subText: "After 15 days, the page becomes inactive unless upgraded.",
+    details: [
+      "Digital tribute page",
+      "Photo & life story section",
+      "Condolence messages",
+      "Unique sub-domain (e.g., name.trubute.com)",
+    ],
     type: "free" as PlanType,
   },
   {
-    name: "Premium",
-    price: "₹3,999 /yr",
-    subText: "All features. Get full Premium access for a year.",
+    name: "Annual Tribute Plan (Most Popular)",
+    price: "₹999 /yr",
+    id: "Premium",
+    subText: "Includes everything in Free +",
     details: [
-      "Everything in Basic",
-      "Custom domain",
-      "Unlimited photos & tributes",
+      "Active sub-domain for 1 year",
+      "Share via WhatsApp & social media",
+      "Permanent online visibility during plan period",
+      "Unlimited photos & messages",
+      "Editable tribute content",
       "Priority support",
     ],
     type: "yearly" as PlanType,
   },
   {
-    name: "Lifetime",
-    price: "₹7,999 one-time",
-    subText:
-      "Everything in Premium, forever. Never worry about renewals or losing memories.",
+    id: "Lifetime",
+    name: "Permanent Tribute Plan",
+    price: "₹4,999 one-time",
+    subText: "A lifetime digital legacy for your loved one.",
     details: [
-      "Everything in Premium",
-      "Lifetime hosting",
-      "Permanent access",
-      "Dedicated support",
+      "Lifetime sub-domain & hosting",
+      "No yearly renewal",
+      "Permanent online memorial",
+      "Priority support",
+      "Featured as “Legacy Tribute” (optional)",
+      "Share via WhatsApp & social media",
+      "Unlimited photos & messages",
+      "Editable tribute content",
     ],
     type: "lifetime" as PlanType,
   },
 ];
 
-const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
+const StepThreePlan: React.FC<StepThreePlanProps> = ({
+  lovedOneForm,
+  setActiveStep,
+  isPaymentCompleted,
+  setIsPaymentCompleted,
+}) => {
   const { user } = useAuth();
   const selectedPlanName = lovedOneForm.watch("plan");
 
   const selectedPlan = plans.find((p) => p.name === selectedPlanName);
 
-  const { mutateAsync: createOrder, isLoading } = useCreatePaymentOrder();
+  const { mutateAsync: createOrder } = useCreatePaymentOrder();
 
   const handlePayment = async () => {
     if (!selectedPlan) {
@@ -99,18 +125,29 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
       toast.success("Free plan activated ❤️");
       return;
     }
+    // if (selectedPlan.type === "free") {
+    //   alert("Free plan activated ❤️");
+    //   setIsPaymentCompleted(true);
+    //   setActiveStep(3);
+    //   return;
+    // }
 
     try {
       // CREATE ORDER
-
 
       const order = await createOrder({
         planType: selectedPlan.type,
         userId: user?._id!,
       });
-       console.log("tempMemorialId", order);
-          
-           localStorage.setItem("tempMemorialId", order?.tempMemorialId);
+      console.log("tempMemorialId", order?.tempMemorialId);
+
+      localStorage.setItem("tempMemorialId", order?.tempMemorialId);
+      // 🆓 FREE PLAN → NO RAZORPAY
+      if (order.free) {
+        setIsPaymentCompleted(true);
+        setActiveStep(3);
+        return;
+      }
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -118,16 +155,18 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
         name: "Trubute",
         description: "Memorial Website Plan",
         order_id: order.orderId,
-        tempMemorialId:order.tempMemorialId,
+        tempMemorialId: order.tempMemorialId,
 
         handler: async (response: any) => {
-         
           await verifyPayment({
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
           });
           toast.success("Payment successful ❤️");
+          setIsPaymentCompleted(true);
+          setActiveStep(3);
+          alert("Payment successful ❤️");
         },
 
         theme: {
@@ -229,7 +268,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({ lovedOneForm }) => {
             "&:hover": { backgroundColor: "#a17837" },
           }}
         >
-          {selectedPlan?.type === "free" ? "Continue" : "Pay Now"}
+          {selectedPlan?.type === "free" ? "Free Plan" : "Pay Now"}
         </Button>
       </Box>
 
@@ -255,8 +294,8 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
 
     let tempMemorialId = localStorage.getItem("tempMemorialId");
 
-    console.log('temp',tempMemorialId);
-    
+    console.log("temp", tempMemorialId);
+
     // Construct payload
     const payload = {
       ...data,
@@ -404,8 +443,8 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
 
 // --- Form Schemas ---
 const signupSchema = z.object({
-  firstName: z.string().min(1, "First name required"),
-  lastName: z.string().min(1, "Last name required"),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Minimum 6 characters"),
 });
@@ -451,6 +490,8 @@ export type LovedOneFormData = z.infer<typeof lovedOneSchema>;
 
 export const CreateTributePage: React.FC = () => {
   const { search } = useLocation();
+  const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
+
   const params = new URLSearchParams(search);
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -500,9 +541,47 @@ export const CreateTributePage: React.FC = () => {
   const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
   const handleNext = () => setActiveStep((prev) => prev + 1);
 
-  const handleSignupSubmit = (data: SignupFormData) => {
-    console.log("✅ Signup data:", data);
-    setActiveStep(1);
+  // const loginMutation = useLogin();
+  const { login } = useAuth();
+  const loginMutation = useLogin();
+  const signupMutation = useSignup();
+
+  const handleSignup = (data: SignupFormData) => {
+    signupMutation.mutate(
+      {
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: (res) => {
+          localStorage.setItem("token", res.token);
+          setActiveStep(1);
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.message || "Signup failed");
+        },
+      }
+    );
+  };
+
+  const handleLogin = (data: SignupFormData) => {
+    loginMutation.mutate(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: (res) => {
+          login(res);
+          localStorage.setItem("token", res.token);
+          setActiveStep(1);
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.message || "Login failed");
+        },
+      }
+    );
   };
 
   const handleLovedOneSubmit = (data: LovedOneFormData) => {
@@ -551,7 +630,9 @@ export const CreateTributePage: React.FC = () => {
             <StepOneSignup
               control={signupForm.control}
               errors={signupForm.formState.errors}
-              onSubmit={signupForm.handleSubmit(handleSignupSubmit)}
+              onSignup={handleSignup}
+              onLogin={handleLogin}
+              handleSubmit={signupForm.handleSubmit}
             />
           )}
 
@@ -563,12 +644,19 @@ export const CreateTributePage: React.FC = () => {
             />
           )}
 
-          {activeStep === 2 && <StepThreePlan lovedOneForm={lovedOneForm} />}
+          {activeStep === 2 && (
+            <StepThreePlan
+              setActiveStep={setActiveStep}
+              lovedOneForm={lovedOneForm}
+              isPaymentCompleted={isPaymentCompleted}
+              setIsPaymentCompleted={setIsPaymentCompleted}
+            />
+          )}
           {activeStep === 3 && <StepFourPrivacy lovedOneForm={lovedOneForm} />}
 
           <Stack direction="row" justifyContent="space-between" mt={4}>
             <Button
-              disabled={activeStep === 0}
+              disabled={activeStep === 0 || isPaymentCompleted}
               onClick={handleBack}
               variant="outlined"
               sx={{ borderRadius: 2 }}
@@ -576,19 +664,22 @@ export const CreateTributePage: React.FC = () => {
               Back
             </Button>
 
-            {activeStep > 1 && activeStep < steps.length - 1 && (
-              <Button
-                onClick={handleNext}
-                variant="contained"
-                sx={{
-                  backgroundColor: "#b68b43",
-                  borderRadius: 2,
-                  "&:hover": { backgroundColor: "#a17837" },
-                }}
-              >
-                Continue
-              </Button>
-            )}
+            {activeStep > 1 &&
+              activeStep < steps.length - 1 &&
+              activeStep === 2 &&
+              isPaymentCompleted && (
+                <Button
+                  onClick={handleNext}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#b68b43",
+                    borderRadius: 2,
+                    "&:hover": { backgroundColor: "#a17837" },
+                  }}
+                >
+                  Continue
+                </Button>
+              )}
           </Stack>
         </Paper>
       </Container>
@@ -599,19 +690,33 @@ export const CreateTributePage: React.FC = () => {
 interface StepOneSignupProps {
   control: Control<SignupFormData>;
   errors: FieldErrors<SignupFormData>;
-  onSubmit: () => void;
+  onSignup: (data: SignupFormData) => void;
+  onLogin: (data: SignupFormData) => void;
+  handleSubmit: UseFormHandleSubmit<SignupFormData>;
 }
 
 const StepOneSignup: React.FC<StepOneSignupProps> = ({
   control,
   errors,
-  onSubmit,
+  onSignup,
+  onLogin,
+  handleSubmit,
 }) => {
+  const [isSignup, setIsSignup] = useState(true);
+
+  const handleFormSubmit = (data: SignupFormData) => {
+    if (isSignup) {
+      onSignup(data);
+    } else {
+      onLogin(data);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Stack spacing={3}>
-        <Typography variant="h5" textAlign="center">
-          Sign in or Create an Account
+        <Typography variant="h5" textAlign="center" fontWeight={600}>
+          {isSignup ? "Create an Account" : "Sign In"}
         </Typography>
 
         <Stack
@@ -620,36 +725,53 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
           alignItems="center"
           justifyContent="space-between"
         >
+          {/* -------- SOCIAL LOGIN -------- */}
           <Stack spacing={2} flex={1} alignItems="center">
             <Typography variant="body1">Use your social profile:</Typography>
+
             <Button
               variant="contained"
-              startIcon={<FacebookIcon />}
+              startIcon={<XIcon />}
               fullWidth
               sx={{
-                backgroundColor: "#1877f2",
-                "&:hover": { backgroundColor: "#145dbf" },
+                backgroundColor: "#000",
+                "&:hover": { backgroundColor: "#1a1a1a" },
                 borderRadius: 2,
                 py: 1.2,
-                fontWeight: 500,
+                fontWeight: 600,
                 maxWidth: 280,
+                textTransform: "none",
+              }}
+              onClick={() => {
+                // later: X OAuth
+                // after success -> set token -> move step
               }}
             >
-              Sign in with Facebook
+              Continue with X
             </Button>
+
             <Button
               variant="outlined"
               startIcon={<GoogleIcon />}
               fullWidth
               sx={{
-                borderColor: "#dadce0",
+                backgroundColor: "#fff",
+                color: "#1a73e8",
+                borderColor: "#d2d6dc",
                 borderRadius: 2,
-                py: 1.2,
-                fontWeight: 500,
+                py: 1.3,
+                fontWeight: 600,
                 maxWidth: 280,
+                textTransform: "none",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                "&:hover": {
+                  backgroundColor: "#f8f9fa",
+                  borderColor: "#c6cacf",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                },
               }}
             >
-              Sign in with Google
+              Continue with Google
             </Button>
           </Stack>
 
@@ -663,38 +785,45 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
             }}
           />
 
+          {/* -------- MANUAL FORM -------- */}
           <Stack spacing={2} flex={1} sx={{ width: "100%", maxWidth: 350 }}>
-            <Typography variant="body1">Or sign up manually:</Typography>
+            <Typography variant="body1">
+              {isSignup ? "Or sign up manually:" : "Or sign in with email:"}
+            </Typography>
 
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="First name"
-                  size="small"
-                  fullWidth
-                  error={!!errors.firstName}
-                  helperText={errors.firstName?.message}
+            {isSignup && (
+              <>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="First name"
+                      size="small"
+                      fullWidth
+                      error={!!errors.firstName}
+                      helperText={errors.firstName?.message}
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Controller
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Last name"
-                  size="small"
-                  fullWidth
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Last name"
+                      size="small"
+                      fullWidth
+                      error={!!errors.lastName}
+                      helperText={errors.lastName?.message}
+                    />
+                  )}
                 />
-              )}
-            />
+              </>
+            )}
 
             <Controller
               name="email"
@@ -735,12 +864,32 @@ const StepOneSignup: React.FC<StepOneSignupProps> = ({
                 backgroundColor: "#b68b43",
                 borderRadius: 2,
                 py: 1.2,
-                fontWeight: 500,
+                fontWeight: 600,
                 "&:hover": { backgroundColor: "#a17837" },
               }}
             >
-              Continue
+              {isSignup ? "Create Account" : "Sign In"}
             </Button>
+
+            <Typography
+              variant="body2"
+              textAlign="center"
+              sx={{ mt: 1.5, color: "text.secondary" }}
+            >
+              {isSignup ? "Already have an account?" : "Don’t have an account?"}{" "}
+              <Box
+                component="span"
+                sx={{
+                  color: "#b68b43",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  "&:hover": { textDecoration: "underline" },
+                }}
+                onClick={() => setIsSignup(!isSignup)}
+              >
+                {isSignup ? "Sign in" : "Create account"}
+              </Box>
+            </Typography>
           </Stack>
         </Stack>
       </Stack>
@@ -1294,4 +1443,4 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
   );
 };
 
-export default StepTwoLovedOne;
+export default CreateTributePage;

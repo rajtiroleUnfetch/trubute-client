@@ -139,7 +139,7 @@
             />
 
             {uploadMutation.isPending && (
-                <Typography sx={{ mt: 1, color: "gray" }}>
+                <Typography sx={{ mt: 1, color: "neutral" }}>
                 Uploading audio…
                 </Typography>
             )}
