@@ -443,41 +443,53 @@ const signupSchema = z.object({
   password: z.string().min(6, "Minimum 6 characters"),
 });
 
-const lovedOneSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  middleName: z.string().optional(),
-  lastName: z.string().min(1, "Last name is required"),
-  gender: z.string().min(1, "Gender is required"),
-  relationship: z.string().min(1, "Relationship is required"),
-  relationshipOther: z.string().optional(),
-  designation: z.string().min(1, "Designation is required"),
-  designationOther: z.string().optional(),
-  privacy: z.string().optional(),
-  plan: z.string().optional(),
+const lovedOneSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    middleName: z.string().optional(),
+    lastName: z.string().min(1, "Last name is required"),
+    gender: z.string().min(1, "Gender is required"),
+    relationship: z.string().min(1, "Relationship is required"),
+    relationshipOther: z.string().optional(),
+    designation: z.string().min(1, "Designation is required"),
+    designationOther: z.string().optional(),
+    privacy: z.string().optional(),
+    plan: z.string().optional(),
 
-  website: z
-    .string()
-    .min(1, "Website name is required")
-    .regex(/^[a-zA-Z0-9-]+$/, "Only letters, numbers, and hyphens are allowed"),
-  specialDesignation: z.string().optional(),
-  moreDetails: z.string().optional(),
-  bornYear: z.string().optional(),
-  bornMonth: z.string().optional(),
-  bornDay: z.string().optional(),
-  bornCity: z.string().optional(),
-  bornState: z.string().optional(),
-  bornCountry: z.string().optional(),
-  passedYear: z.string().optional(),
-  passedMonth: z.string().optional(),
-  passedDay: z.string().optional(),
-  passedCity: z.string().optional(),
-  passedState: z.string().optional(),
-  passedCountry: z.string().optional(),
-  status: z.string().optional(),
-  title: z.string().optional(),
-  description: z.string().optional(),
-  location: z.string().optional(),
-});
+    website: z
+      .string()
+      .min(1, "Website name is required")
+      .regex(
+        /^[a-zA-Z0-9-]+$/,
+        "Only letters, numbers, and hyphens are allowed"
+      ),
+    specialDesignation: z.string().optional(),
+    moreDetails: z.string().optional(),
+    bornYear: z.string().optional(),
+    bornMonth: z.string().optional(),
+    bornDay: z.string().min(1, "Date of Birth is required"),
+    passedDay: z.string().min(1, "Date of Passing is required"),
+    bornCity: z.string().optional(),
+    bornState: z.string().optional(),
+    bornCountry: z.string().optional(),
+    passedYear: z.string().optional(),
+    passedMonth: z.string().optional(),
+    passedCity: z.string().optional(),
+    passedState: z.string().optional(),
+    passedCountry: z.string().optional(),
+    status: z.string().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    location: z.string().optional(),
+  })
+  .refine(
+    (data) =>
+      new Date(data.passedDay).getTime() > new Date(data.bornDay).getTime(),
+    {
+      message: "Date of Passing must be after Date of Birth",
+      path: ["passedDay"],
+    }
+  );
 
 export type SignupFormData = z.infer<typeof signupSchema>;
 export type LovedOneFormData = z.infer<typeof lovedOneSchema>;
@@ -1026,6 +1038,57 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
               </Typography>
             )}
 
+          <Stack direction="row" spacing={2} alignItems="center">
+  <Controller
+    name="bornDay"
+    control={control}
+    render={({ field, fieldState }) => (
+      <DatePicker
+        label="Date of Birth"
+        value={field.value ? dayjs(field.value) : null}
+        onChange={(date) =>
+          field.onChange(date ? date.toISOString() : "")
+        }
+        slotProps={{
+          textField: {
+            size: "small",
+            fullWidth: true,
+            error: !!fieldState.error,
+            helperText: fieldState.error?.message,
+            required: true,
+          },
+        }}
+      />
+    )}
+  />
+</Stack>
+
+          <Stack direction="row" spacing={2} alignItems="center">
+  <Controller
+    name="passedDay"
+    control={control}
+    render={({ field, fieldState }) => (
+      <DatePicker
+        label="Date of Passing"
+        value={field.value ? dayjs(field.value) : null}
+        onChange={(date) =>
+          field.onChange(date ? date.toISOString() : "")
+        }
+        disableFuture
+        slotProps={{
+          textField: {
+            size: "small",
+            fullWidth: true,
+            error: !!fieldState.error,
+            helperText: fieldState.error?.message,
+            required: true,
+          },
+        }}
+      />
+    )}
+  />
+</Stack>
+
             {/* --- Relationship Dropdown --- */}
             <Controller
               name="relationship"
@@ -1233,25 +1296,6 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
                   Born
                 </Typography>
 
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Controller
-                    name="bornDay"
-                    control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        label="Date of Birth"
-                        value={field.value ? dayjs(field.value) : null}
-                        onChange={(date: any) =>
-                          field.onChange(date ? date.toISOString() : "")
-                        }
-                        slotProps={{
-                          textField: { size: "small", fullWidth: true },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
-
                 <Stack direction="row" spacing={2} mt={1}>
                   <Controller
                     name="bornCity"
@@ -1323,25 +1367,6 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
                 <Typography variant="body2" fontWeight={600} mt={3}>
                   Passed Away
                 </Typography>
-
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Controller
-                    name="passedDay"
-                    control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        label="Date of Passing"
-                        value={field.value ? dayjs(field.value) : null}
-                        onChange={(date: any) =>
-                          field.onChange(date ? date.toISOString() : "")
-                        }
-                        slotProps={{
-                          textField: { size: "small", fullWidth: true },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
 
                 <Stack direction="row" spacing={2} mt={1}>
                   <Controller

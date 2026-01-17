@@ -9,7 +9,8 @@ function TributePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE = process.env.REACT_APP_API_BASE;
+const API_BASE = import.meta.env.VITE_API_BASE as string;
+
 
   useEffect(() => {
     if (!slug) return;

@@ -14,6 +14,7 @@ import {
   ListItemText,
   Divider,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Search, Menu, Close } from "@mui/icons-material";
 import ProfileMenu from "./ProfileMenu";
@@ -26,6 +27,7 @@ const Navbar = () => {
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+const theme = useTheme();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -139,7 +141,10 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="sticky" color="default" elevation={1}>
+      <AppBar position="sticky" color="default" elevation={1} sx={{
+    bgcolor: theme.palette.navbar.background,
+    borderBottom: `1px solid ${theme.palette.navbar.border}`,
+  }}>
         <Toolbar
           sx={{
             flexDirection: { xs: "column", md: "row" },
@@ -168,15 +173,22 @@ const Navbar = () => {
               }}
               onClick={() => navigate("/")}
             >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 700,
-                  color: theme.palette.primary.main,
-                }}
-              >
-                Trubute<span style={{ color: "#1565c0" }}>.com</span>
-              </Typography>
+             <Typography
+  variant="h5"
+  sx={{
+    fontWeight: 700,
+    color: theme.palette.navbar.logo,
+  }}
+>
+  Trubute
+  <Box
+    component="span"
+    sx={{ color: theme.palette.navbar.logoAccent }}
+  >
+    .com
+  </Box>
+</Typography>
+
             </Box>
 
             {/* Center nav (desktop only) */}
@@ -196,17 +208,16 @@ const Navbar = () => {
                   key={item.path}
                   variant="body1"
                   sx={{
-                    cursor: "pointer",
-                    fontWeight:
-                      location.pathname === item.path ? 600 : 400,
-                    color:
-                      location.pathname === item.path
-                        ? theme.palette.primary.main
-                        : "text.primary",
-                    "&:hover": {
-                      color: theme.palette.primary.main,
-                    },
-                  }}
+    cursor: "pointer",
+    fontWeight: location.pathname === item.path ? 600 : 400,
+    color:
+      location.pathname === item.path
+        ? theme.palette.navbar.linkActive
+        : theme.palette.navbar.link,
+    "&:hover": {
+      color: theme.palette.navbar.linkActive,
+    },
+  }}
                   onClick={() => navigate(item.path)}
                 >
                   {item.label}
@@ -228,15 +239,11 @@ const Navbar = () => {
                 <Box
                   component="form"
                   onSubmit={handleSearch}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    backgroundColor: "#ffffff",
-                    borderRadius: 5,
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                    overflow: "hidden",
-                    minWidth: "320px",
-                  }}
+                   sx={{
+    backgroundColor: theme.palette.navbar.searchBg,
+    borderRadius: 5,
+    boxShadow: theme.shadows[1],
+  }}
                 >
                   <TextField
                     size="small"
@@ -257,13 +264,13 @@ const Navbar = () => {
                   />
                   <IconButton
                     type="submit"
-                    sx={{
-                      backgroundColor: "#1565c0",
-                      color: "#fff",
-                      borderRadius: 0,
-                      px: 2.5,
-                      "&:hover": { backgroundColor: "#0d47a1" },
-                    }}
+                   sx={{
+    bgcolor: theme.palette.navbar.searchButtonBg,
+    color: "#fff",
+    "&:hover": {
+      bgcolor: theme.palette.navbar.searchButtonHover,
+    },
+  }}
                   >
                     <Search />
                   </IconButton>
@@ -272,7 +279,7 @@ const Navbar = () => {
                 {/* Profile / Auth (desktop) */}
                 {user ? (
                   <IconButton onClick={handleProfileClick}>
-                    <Avatar sx={{ bgcolor: "#1565c0" }}>
+                    <Avatar  sx={{ bgcolor: theme.palette.navbar.avatarBg }}>
                       {user.name?.charAt(0).toUpperCase()}
                     </Avatar>
                   </IconButton>

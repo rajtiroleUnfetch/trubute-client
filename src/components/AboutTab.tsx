@@ -124,6 +124,214 @@
 // };
 
 // export default AboutTab;
+
+// import { useState } from "react";
+// import {
+//   Box,
+//   Typography,
+//   Button,
+//   Dialog,
+//   DialogTitle,
+//   DialogContent,
+//   DialogActions,
+//   TextField,
+// } from "@mui/material";
+// import AboutSectionCard from "./AboutSectionCard";
+// import MemorialCarousel from "./MemorialCarousel";
+// import dayjs from "dayjs";
+// import axiosInstance from "../api/axiosInstance";
+// import { useAuth } from "../hooks/useAuth";
+
+// const formatDate = (isoDate: string | undefined) => {
+//   if (!isoDate) return "—";
+//   return dayjs(isoDate).format("DD MMM YYYY");
+// };
+
+// const AboutTab = ({ memorial, reloadMemorial }: any) => {
+//   const [open, setOpen] = useState(false);
+//   const [form, setForm] = useState({ ...memorial });
+//   const user=useAuth()
+//   console.log(user,memorial,'memorial')
+
+//   const handleChange = (e: any) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const handleUpdate = async () => {
+//     try {
+//       await axiosInstance.put(`/memorial/${memorial._id}`, form);
+//       setOpen(false);
+//       reloadMemorial(); // refresh data after update
+//     } catch (err) {
+//       console.error(err);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const isOwner = user.user?.id === memorial?.createdBy;
+
+//   return (
+//     <Box sx={{ p: 2 }}>
+//       <Typography
+//         variant="h4"
+//         fontWeight={700}
+//         sx={{ color: "#0b2c52", mb: 3, textAlign: "center" }}
+//       >
+//         Honoring the Life of {memorial?.firstName}{" "}
+//         {memorial?.middleName || ""} {memorial?.lastName}
+//       </Typography>
+
+//       {/* SHOW EDIT BUTTON ONLY IF USER IS CREATOR */}
+//       {isOwner && (
+//         <Box sx={{ textAlign: "right", mb: 2 }}>
+//           <Button variant="contained" onClick={() => setOpen(true)}>
+//             Edit Details
+//           </Button>
+//         </Box>
+//       )}
+
+//       {/* DETAILS CAROUSEL */}
+//       <MemorialCarousel>
+//         <AboutSectionCard title="Personal Details" bg="#f7f9fc">
+//           <Typography>
+//             <strong>Full Name:</strong> {memorial?.firstName}{" "}
+//             {memorial?.middleName || ""} {memorial?.lastName}
+//           </Typography>
+
+//           <Typography>
+//             <strong>Relationship:</strong>{" "}
+//             {memorial?.relationshipOther || memorial?.relationship}
+//           </Typography>
+
+//           <Typography>
+//             <strong>Designation:</strong>{" "}
+//             {memorial?.designationOther || memorial?.designation}
+//           </Typography>
+
+//           {memorial?.title && (
+//             <Typography>
+//               <strong>Title:</strong> {memorial?.title}
+//             </Typography>
+//           )}
+
+//           {memorial?.description && (
+//             <Typography>
+//               <strong>Description:</strong> {memorial?.description}
+//             </Typography>
+//           )}
+
+//           {memorial?.location && (
+//             <Typography>
+//               <strong>Location:</strong> {memorial?.location}
+//             </Typography>
+//           )}
+//         </AboutSectionCard>
+
+//         <AboutSectionCard title="Birth Information" bg="#fff2f2">
+//           <Typography>
+//             <strong>Date of Birth:</strong> {formatDate(memorial?.bornDay)}
+//           </Typography>
+
+//           <Typography>
+//             <strong>Birthplace:</strong> {memorial?.bornCity}, {memorial?.bornState},{" "}
+//             {memorial?.bornCountry}
+//           </Typography>
+//         </AboutSectionCard>
+
+//         <AboutSectionCard title="In Loving Memory" bg="#edf3ff">
+//           <Typography>
+//             <strong>Date of Passing:</strong> {formatDate(memorial?.passedDay)}
+//           </Typography>
+
+//           <Typography>
+//             <strong>Place:</strong> {memorial?.passedCity},{" "}
+//             {memorial?.passedState}, {memorial?.passedCountry}
+//           </Typography>
+//         </AboutSectionCard>
+
+//         <AboutSectionCard title="Legacy" bg="#fff8e8">
+//           <Typography sx={{ lineHeight: 1.7 }}>
+//             {memorial?.moreDetails ||
+//               "Their light continues to shine through those they touched."}
+//           </Typography>
+//         </AboutSectionCard>
+
+//         <AboutSectionCard title="Memorial Information" bg="#f4fafb">
+//           <Typography>
+//             <strong>Memorial Page:</strong> {memorial?.website}
+//           </Typography>
+//           <Typography>
+//             <strong>Plan:</strong> {memorial?.plan}
+//           </Typography>
+//           <Typography>
+//             <strong>Privacy:</strong> {memorial?.privacy}
+//           </Typography>
+//         </AboutSectionCard>
+//       </MemorialCarousel>
+
+//       {/* POPUP FORM FOR UPDATING DETAILS */}
+//       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+//         <DialogTitle>Edit Memorial Details</DialogTitle>
+//         <DialogContent sx={{ display: "grid", gap: 2, mt: 1 }}>
+//           <TextField
+//             label="First Name"
+//             name="firstName"
+//             value={form.firstName}
+//             onChange={handleChange}
+//             fullWidth
+//           />
+//           <TextField
+//             label="Middle Name"
+//             name="middleName"
+//             value={form.middleName}
+//             onChange={handleChange}
+//             fullWidth
+//           />
+//           <TextField
+//             label="Last Name"
+//             name="lastName"
+//             value={form.lastName}
+//             onChange={handleChange}
+//             fullWidth
+//           />
+//           <TextField
+//             label="Title"
+//             name="title"
+//             value={form.title}
+//             onChange={handleChange}
+//             fullWidth
+//           />
+//           <TextField
+//             label="Description"
+//             name="description"
+//             value={form.description}
+//             onChange={handleChange}
+//             multiline
+//             rows={3}
+//             fullWidth
+//           />
+//           <TextField
+//             label="Location"
+//             name="location"
+//             value={form.location}
+//             onChange={handleChange}
+//             fullWidth
+//           />
+//         </DialogContent>
+
+//         <DialogActions>
+//           <Button onClick={() => setOpen(false)}>Cancel</Button>
+//           <Button variant="contained" onClick={handleUpdate}>
+//             Save Changes
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Box>
+//   );
+// };
+
+// export default AboutTab;
+
 import { useState } from "react";
 import {
   Box,
@@ -134,6 +342,11 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Divider,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AboutSectionCard from "./AboutSectionCard";
 import MemorialCarousel from "./MemorialCarousel";
@@ -141,57 +354,61 @@ import dayjs from "dayjs";
 import axiosInstance from "../api/axiosInstance";
 import { useAuth } from "../hooks/useAuth";
 
-const formatDate = (isoDate: string | undefined) => {
-  if (!isoDate) return "—";
-  return dayjs(isoDate).format("DD MMM YYYY");
-};
+const formatDate = (isoDate?: string) =>
+  isoDate ? dayjs(isoDate).format("DD MMM YYYY") : "—";
 
 const AboutTab = ({ memorial, reloadMemorial }: any) => {
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ ...memorial });
-  const user=useAuth()
-  console.log(user,memorial,'memorial')
+  const { user } = useAuth();
+  const isOwner = user?.id === memorial?.createdBy;
 
-  const handleChange = (e: any) => {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({
+    ...memorial,
+    theme: memorial.theme || "default",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleUpdate = async () => {
     try {
-      await axiosInstance.put(`/memorial/${memorial._id}`, form);
+      await axiosInstance.put(`/memorials/${memorial._id}`, {
+      ...form,
+      theme: form.theme,
+    });
+    // await axiosInstance.put(`/memorials/${memorial._id}`, form);mem
       setOpen(false);
-      reloadMemorial(); // refresh data after update
-    } catch (err) {
-      console.error(err);
-      alert("Update failed");
+      reloadMemorial();
+    } catch {
+      alert("Failed to update memorial details");
     }
   };
 
-  const isOwner = user.user?.id === memorial?.createdBy;
-
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ px: { xs: 1, md: 4 }, pb: 4 }}>
+      {/* HEADER */}
       <Typography
-        variant="h4"
-        fontWeight={700}
-        sx={{ color: "#0b2c52", mb: 3, textAlign: "center" }}
+        variant="h3"
+        textAlign="center"
+        fontWeight={600}
+        sx={{ mb: 4 }}
       >
-        Honoring the Life of {memorial?.firstName}{" "}
-        {memorial?.middleName || ""} {memorial?.lastName}
+        Honoring the Life of {memorial?.firstName} {memorial?.middleName || ""}{" "}
+        {memorial?.lastName}
       </Typography>
 
-      {/* SHOW EDIT BUTTON ONLY IF USER IS CREATOR */}
       {isOwner && (
-        <Box sx={{ textAlign: "right", mb: 2 }}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
-            Edit Details
+        <Box sx={{ textAlign: "right", mb: 3 }}>
+          <Button variant="outlined" onClick={() => setOpen(true)}>
+            Edit Memorial Details
           </Button>
         </Box>
       )}
 
       {/* DETAILS CAROUSEL */}
       <MemorialCarousel>
-        <AboutSectionCard title="Personal Details" bg="#f7f9fc">
+        <AboutSectionCard title="Personal Details">
           <Typography>
             <strong>Full Name:</strong> {memorial?.firstName}{" "}
             {memorial?.middleName || ""} {memorial?.lastName}
@@ -226,18 +443,18 @@ const AboutTab = ({ memorial, reloadMemorial }: any) => {
           )}
         </AboutSectionCard>
 
-        <AboutSectionCard title="Birth Information" bg="#fff2f2">
+        <AboutSectionCard title="Birth Information">
           <Typography>
             <strong>Date of Birth:</strong> {formatDate(memorial?.bornDay)}
           </Typography>
 
           <Typography>
-            <strong>Birthplace:</strong> {memorial?.bornCity}, {memorial?.bornState},{" "}
-            {memorial?.bornCountry}
+            <strong>Birthplace:</strong> {memorial?.bornCity},{" "}
+            {memorial?.bornState}, {memorial?.bornCountry}
           </Typography>
         </AboutSectionCard>
 
-        <AboutSectionCard title="In Loving Memory" bg="#edf3ff">
+        <AboutSectionCard title="In Loving Memory">
           <Typography>
             <strong>Date of Passing:</strong> {formatDate(memorial?.passedDay)}
           </Typography>
@@ -248,62 +465,71 @@ const AboutTab = ({ memorial, reloadMemorial }: any) => {
           </Typography>
         </AboutSectionCard>
 
-        <AboutSectionCard title="Legacy" bg="#fff8e8">
-          <Typography sx={{ lineHeight: 1.7 }}>
+        <AboutSectionCard title="Legacy">
+          <Typography sx={{ lineHeight: 1.8 }}>
             {memorial?.moreDetails ||
               "Their light continues to shine through those they touched."}
           </Typography>
         </AboutSectionCard>
 
-        <AboutSectionCard title="Memorial Information" bg="#f4fafb">
+        <AboutSectionCard title="Memorial Information">
           <Typography>
             <strong>Memorial Page:</strong> {memorial?.website}
           </Typography>
+
           <Typography>
             <strong>Plan:</strong> {memorial?.plan}
           </Typography>
+
           <Typography>
             <strong>Privacy:</strong> {memorial?.privacy}
           </Typography>
         </AboutSectionCard>
       </MemorialCarousel>
 
-      {/* POPUP FORM FOR UPDATING DETAILS */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+      {/* EDIT DIALOG */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogTitle>Edit Memorial Details</DialogTitle>
+
         <DialogContent sx={{ display: "grid", gap: 2, mt: 1 }}>
           <TextField
             label="First Name"
             name="firstName"
-            value={form.firstName}
+            value={form.firstName || ""}
             onChange={handleChange}
             fullWidth
           />
           <TextField
             label="Middle Name"
             name="middleName"
-            value={form.middleName}
+            value={form.middleName || ""}
             onChange={handleChange}
             fullWidth
           />
           <TextField
             label="Last Name"
             name="lastName"
-            value={form.lastName}
+            value={form.lastName || ""}
             onChange={handleChange}
             fullWidth
           />
+          <Divider />
           <TextField
             label="Title"
             name="title"
-            value={form.title}
+            value={form.title || ""}
             onChange={handleChange}
             fullWidth
           />
           <TextField
             label="Description"
             name="description"
-            value={form.description}
+            value={form.description || ""}
             onChange={handleChange}
             multiline
             rows={3}
@@ -312,13 +538,27 @@ const AboutTab = ({ memorial, reloadMemorial }: any) => {
           <TextField
             label="Location"
             name="location"
-            value={form.location}
+            value={form.location || ""}
             onChange={handleChange}
             fullWidth
           />
+          <FormControl fullWidth>
+            <InputLabel>Theme</InputLabel>
+            <Select
+              value={form.theme}
+              label="Theme"
+              onChange={(e) => setForm({ ...form, theme: e.target.value })}
+            >
+              <MenuItem value="default">Default (Warm)</MenuItem>
+              <MenuItem value="light">Light</MenuItem>
+              <MenuItem value="blue">Blue</MenuItem>
+              <MenuItem value="pink">Pink</MenuItem>
+              <MenuItem value="dark">Dark</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" onClick={handleUpdate}>
             Save Changes

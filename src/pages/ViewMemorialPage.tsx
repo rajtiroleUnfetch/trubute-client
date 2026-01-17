@@ -18,7 +18,8 @@ const ViewMemorialPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Base URL without trailing slash
-  const API_BASE =process.env.REACT_APP_API_BASE;
+const API_BASE = import.meta.env.VITE_API_BASE as string;
+
 
   useEffect(() => {
     if (!idOrWebsite) return;

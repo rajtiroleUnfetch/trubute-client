@@ -11,13 +11,18 @@ import ObituaryList from "../components/ObituaryList";
 // import CarouselCards from "../components/CarouselCards";
 import CarouselCards from "../components/CarouselCards";
 import FeaturedTributes from "../components/FeaturedTributes";
+import FeaturedTrubute from "../components/FeaturedTrubute";
 
 const HomePage: React.FC = () => {
   return (
-    <>
+     <Box
+      sx={{
+        backgroundImage: "url('/images/cathy-mu--6gbnkhFtKo-unsplash.jpg')",
+      }}
+    >
       {/* <HeroSection /> */}
       <MemorialForm />
-
+<FeaturedTrubute/>
 
 
       {/* <ObituaryList /> */}
@@ -54,12 +59,12 @@ const HomePage: React.FC = () => {
 
       {/* ------------------ FEATURED TRIBUTES (CAROUSEL) ------------------ */}
 
-      <Container sx={{ py: 6 }}>
+      {/* <Container sx={{ py: 6 }}>
         <Typography variant="h4" textAlign="center" mb={3} fontWeight={600}>
           Featured Tributes
         </Typography>
         <CarouselCards />
-      </Container>
+      </Container> */}
 
       {/* ------------------ ABOUT SECTION ------------------ */}
       {/* <Box sx={{ backgroundColor: "#f8f9fa", py: 6 }}>

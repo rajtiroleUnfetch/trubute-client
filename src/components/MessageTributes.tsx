@@ -6,6 +6,7 @@ import {
   TextField,
   Button,
   Skeleton,
+  Divider,
 } from "@mui/material";
 import axiosInstance from "../api/axiosInstance";
 import { useAuth } from "../hooks/useAuth";
@@ -28,6 +29,194 @@ const fetchMessages = async ({ pageParam = 1, queryKey }: any) => {
     nextPage: res.data.hasMore ? pageParam + 1 : undefined,
   };
 };
+
+// const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
+//   const { user } = useAuth();
+
+//   // 🔥 Infinite Query for messages
+//   const {
+//     data,
+//     fetchNextPage,
+//     hasNextPage,
+//     isFetchingNextPage,
+//     refetch,
+//     isLoading,
+//   } = useInfiniteQuery({
+//     queryKey: ["tribute-messages", memorialId],
+//     queryFn: fetchMessages,
+//     getNextPageParam: (lastPage) => lastPage.nextPage,
+//     enabled: tab === 1, // Load only when Messages tab is active
+//   });
+
+//   // 🔥 Mutation for posting a tribute message
+//   const addMessageMutation = useMutation({
+//     mutationFn: async (payload: any) =>
+//       axiosInstance.post(`/memorial/${memorialId}/messages`, payload),
+//     onSuccess: () => {
+//       refetch(); // refresh all messages
+//     },
+//   });
+
+//   // Infinite Scroll Listener
+//   useEffect(() => {
+//     if (tab !== 1) return;
+
+//     const handleScroll = () => {
+//       if (
+//         window.innerHeight + window.scrollY >=
+//         document.body.offsetHeight - 200
+//       ) {
+//         if (hasNextPage && !isFetchingNextPage) {
+//           fetchNextPage();
+//         }
+//       }
+//     };
+
+//     window.addEventListener("scroll", handleScroll);
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, [tab, hasNextPage, isFetchingNextPage]);
+
+//   const allMessages = data?.pages?.flatMap((page) => page.messages) ?? [];
+
+//   const MessageInput = ({ onSubmit }: any) => {
+//     const [text, setText] = useState("");
+
+//     const send = () => {
+//       if (!text.trim()) return;
+//       onSubmit(text);
+//       setText("");
+//     };
+
+//     return (
+//       <Box
+//         sx={{
+//           mb: 4,
+//           p: 3,
+//           borderRadius: 3,
+//           background: "linear-gradient(135deg, #fff7f0, #fffcfa)",
+//           boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+//         }}
+//       >
+//         <Typography
+//           variant="h6"
+//           fontWeight={700}
+//           sx={{ color: "#8b5e3c", mb: 1 }}
+//         >
+//           Leave a Tribute
+//         </Typography>
+
+//         <Typography variant="body2" sx={{ mb: 2, color: "#6d4c41" }}>
+//           Share a warm memory, offer your love, or celebrate their legacy. Your
+//           words become part of this special remembrance.
+//         </Typography>
+//         <TextField
+//           fullWidth
+//           multiline
+//           rows={4}
+//           value={text}
+//           onChange={(e) => setText(e.target.value)}
+//           placeholder="Write something from the heart…"
+//           sx={{
+//             background: "white",
+//             borderRadius: 2,
+//             "& .MuiOutlinedInput-root": {
+//               borderRadius: 2,
+//             },
+//           }}
+//         />
+
+//         <Button
+//           variant="contained"
+//           fullWidth
+//           sx={{
+//             mt: 3,
+//             py: 1.3,
+//             borderRadius: 3,
+//             fontSize: "1rem",
+//             fontWeight: 600,
+//             background: "linear-gradient(135deg, #8b5e3c, #a47148)",
+//             "&:hover": {
+//               background: "linear-gradient(135deg, #7a4f31, #8c603a)",
+//             },
+//             textTransform: "none",
+//           }}
+//           onClick={send}
+//         >
+//           Post Tribute
+//         </Button>
+//       </Box>
+//     );
+//   };
+
+//   return (
+//     <Box>
+//       {/* Add Message */}
+//       {user && (
+//         <MessageInput
+//           onSubmit={(text) =>
+//             addMessageMutation.mutate({ message: text, type: "text" })
+//           }
+//         />
+//       )}
+
+//       <Typography
+//         variant="h5"
+//         fontWeight={700}
+//         sx={{ color: "#0b2c52", mb: 3 }}
+//       >
+//         Heartfelt Messages
+//       </Typography>
+
+//       {/* Loading state */}
+//       {isLoading && (
+//         <Box>
+//           {[1, 2, 3].map((s) => (
+//             <Skeleton key={s} height={90} sx={{ mb: 2 }} />
+//           ))}
+//         </Box>
+//       )}
+
+//       {/* No Messages */}
+//       {!isLoading && allMessages.length === 0 && (
+//         <Typography color="text.secondary">
+//           No messages yet — be the first to honor their memory.
+//         </Typography>
+//       )}
+
+//       {/* Message List */}
+//       {allMessages.map((t) => (
+//         <Paper
+//           key={t._id}
+//           sx={{
+//             p: 2.5,
+//             mb: 2,
+//             borderRadius: 2,
+//             backgroundColor: "#fffaf3",
+//             borderLeft: "4px solid #b68b43",
+//           }}
+//         >
+//           <Typography fontWeight={700} sx={{ color: "#0b2c52" }}>
+//             {t.userId?.name}
+//           </Typography>
+
+//           <Typography sx={{ mt: 1 }}>{t.message}</Typography>
+
+//           <Typography variant="caption" sx={{ mt: 1, display: "block" }}>
+//             {new Date(t.createdAt).toLocaleString()}
+//           </Typography>
+//         </Paper>
+//       ))}
+
+//       {isFetchingNextPage && (
+//         <Box sx={{ mt: 2 }}>
+//           <Skeleton height={80} sx={{ mb: 2 }} />
+//         </Box>
+//       )}
+//     </Box>
+//   );
+// };
+
+
 
 const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
   const { user } = useAuth();
@@ -56,7 +245,7 @@ const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
     },
   });
 
-  // Infinite Scroll Listener
+  // Infinite Scroll
   useEffect(() => {
     if (tab !== 1) return;
 
@@ -75,7 +264,9 @@ const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [tab, hasNextPage, isFetchingNextPage]);
 
-  const allMessages = data?.pages?.flatMap((page) => page.messages) ?? [];
+  const allMessages = data?.pages?.flatMap((p) => p.messages) ?? [];
+
+  /* ---------------- MESSAGE INPUT ---------------- */
 
   const MessageInput = ({ onSubmit }: any) => {
     const [text, setText] = useState("");
@@ -87,27 +278,26 @@ const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
     };
 
     return (
-      <Box
+      <Paper
+        elevation={0}
         sx={{
           mb: 4,
           p: 3,
           borderRadius: 3,
-          background: "linear-gradient(135deg, #fff7f0, #fffcfa)",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          backgroundColor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
         }}
       >
-        <Typography
-          variant="h6"
-          fontWeight={700}
-          sx={{ color: "#8b5e3c", mb: 1 }}
-        >
+        <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
           Leave a Tribute
         </Typography>
 
-        <Typography variant="body2" sx={{ mb: 2, color: "#6d4c41" }}>
-          Share a warm memory, offer your love, or celebrate their legacy. Your
-          words become part of this special remembrance.
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Share a memory, express your love, or honor their legacy with a few
+          heartfelt words.
         </Typography>
+
         <TextField
           fullWidth
           multiline
@@ -115,104 +305,93 @@ const MessageTributes = ({ memorialId, tab }: MessageTributesProps) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Write something from the heart…"
-          sx={{
-            background: "white",
-            borderRadius: 2,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 2,
-            },
-          }}
         />
 
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{
-            mt: 3,
-            py: 1.3,
-            borderRadius: 3,
-            fontSize: "1rem",
-            fontWeight: 600,
-            background: "linear-gradient(135deg, #8b5e3c, #a47148)",
-            "&:hover": {
-              background: "linear-gradient(135deg, #7a4f31, #8c603a)",
-            },
-            textTransform: "none",
-          }}
-          onClick={send}
-        >
-          Post Tribute
-        </Button>
-      </Box>
+        <Box sx={{ textAlign: "right", mt: 2 }}>
+          <Button
+            variant="contained"
+            onClick={send}
+            sx={{ px: 4, py: 1.2, borderRadius: 2 }}
+          >
+            Post Tribute
+          </Button>
+        </Box>
+      </Paper>
     );
   };
 
+  /* ---------------- RENDER ---------------- */
+
   return (
     <Box>
-      {/* Add Message */}
+      {/* ADD MESSAGE */}
       {user && (
         <MessageInput
-          onSubmit={(text) =>
+          onSubmit={(text: string) =>
             addMessageMutation.mutate({ message: text, type: "text" })
           }
         />
       )}
 
-      <Typography
-        variant="h5"
-        fontWeight={700}
-        sx={{ color: "#0b2c52", mb: 3 }}
-      >
+      <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
         Heartfelt Messages
       </Typography>
 
-      {/* Loading state */}
+      {/* LOADING */}
       {isLoading && (
-        <Box>
+        <>
           {[1, 2, 3].map((s) => (
             <Skeleton key={s} height={90} sx={{ mb: 2 }} />
           ))}
-        </Box>
+        </>
       )}
 
-      {/* No Messages */}
+      {/* EMPTY */}
       {!isLoading && allMessages.length === 0 && (
         <Typography color="text.secondary">
           No messages yet — be the first to honor their memory.
         </Typography>
       )}
 
-      {/* Message List */}
+      {/* MESSAGE LIST */}
       {allMessages.map((t) => (
         <Paper
           key={t._id}
+          elevation={0}
           sx={{
-            p: 2.5,
+            p: 3,
             mb: 2,
             borderRadius: 2,
-            backgroundColor: "#fffaf3",
-            borderLeft: "4px solid #b68b43",
+            backgroundColor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
           }}
         >
-          <Typography fontWeight={700} sx={{ color: "#0b2c52" }}>
-            {t.userId?.name}
+          <Typography fontWeight={600}>
+            {t.userId?.name || "Anonymous"}
           </Typography>
 
-          <Typography sx={{ mt: 1 }}>{t.message}</Typography>
+          <Typography sx={{ mt: 1.5, whiteSpace: "pre-wrap" }}>
+            {t.message}
+          </Typography>
 
-          <Typography variant="caption" sx={{ mt: 1, display: "block" }}>
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="caption" color="text.secondary">
             {new Date(t.createdAt).toLocaleString()}
           </Typography>
         </Paper>
       ))}
 
+      {/* PAGINATION LOADING */}
       {isFetchingNextPage && (
-        <Box sx={{ mt: 2 }}>
-          <Skeleton height={80} sx={{ mb: 2 }} />
-        </Box>
+        <Skeleton height={80} sx={{ mt: 2 }} />
       )}
     </Box>
   );
 };
+
+
+
 
 export default MessageTributes;

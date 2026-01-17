@@ -9,7 +9,8 @@ import NotFound from "./pages/NotFound";
 import MainLayout from "./pages/MainLayout";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
-import TributePage from "./pages/TributePage";
+import TributePage from "./pages/tribute/TributePage";
+import MemorialRoute from "./pages/MemorialRoute";
 
 function App() {
   return (
@@ -42,8 +43,8 @@ function App() {
       {/* Tribute creation flow */}
       {/* <Route path="/create-memorial" element={<CreateMemorialFor />} /> */}
       <Route path="/create-trubute" element={<CreateTributePage />} />
-      <Route path="/memorial/:website" element={ <MainLayout>
-        <MemorialPage /></MainLayout>} />
+    <Route path="/memorial/:website" element={<MemorialRoute />} />
+
       <Route
         path="/about"
         element={
@@ -60,20 +61,21 @@ function App() {
           </MainLayout>
         }
       />
-      <Route
-        path="/memorial/:website"
-        element={
-          <MainLayout>
-            <MemorialPage />
-          </MainLayout>
-        }
-      />
+
       {/* Memorial Route */}
-      <Route
+      {/* <Route
         path="/memorials/:idOrWebsite"
         element={
           <MainLayout>
             <ViewMemorialPage />
+          </MainLayout>
+        }
+      /> */}
+      <Route
+        path="/memorials/:idOrWebsite"
+        element={
+          <MainLayout>
+            <TributePage />
           </MainLayout>
         }
       />

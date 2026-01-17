@@ -27,7 +27,7 @@ const MemorialForm: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundImage: "url('/images/clouds-bg.jpg')", // optional background
+         backgroundImage: "url('/images/cathy-mu--6gbnkhFtKo-unsplash.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       
@@ -46,7 +46,7 @@ const MemorialForm: React.FC = () => {
           // maxWidth: 800,
           textAlign: "center",
           backdropFilter: "blur(6px)",
-          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          backgroundColor: "rgba(255, 255, 255, 0.45)",
         }}
       >
         <Typography variant="h4" fontWeight={600} gutterBottom>

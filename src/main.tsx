@@ -13,11 +13,12 @@ import theme from "./theme";
 import { CssBaseline } from "@mui/material";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
+import { tributeThemes } from "./tributeTheme";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={tributeThemes.blue}>
       <CssBaseline />
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
