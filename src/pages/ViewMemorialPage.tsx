@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import HeaderSection from "../components/Tabs/HeaderSection";
 import MemoryTabs from "../components/Tabs/MemoryTabs";
+import axiosInstance from "../api/axiosInstance";
 
 type Memorial = {
   _id: string;
@@ -18,22 +19,33 @@ const ViewMemorialPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Base URL without trailing slash
-const API_BASE = import.meta.env.VITE_API_BASE as string;
 
 
-  useEffect(() => {
-    if (!idOrWebsite) return;
+useEffect(() => {
+  if (!idOrWebsite) return;
 
+  const fetchMemorial = async () => {
     setLoading(true);
-    fetch(`${API_BASE}/memorials/${idOrWebsite}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        setMemorial(data.memorial);
-      })
-      .catch(() => setError("Failed to load memorial"))
-      .finally(() => setLoading(false));
-  }, [idOrWebsite]);
+    setError("");
+
+    try {
+      const { data } = await axiosInstance.get(
+        `/memorials/${idOrWebsite}`
+      );
+
+      console.log(data);
+      setMemorial(data.memorial);
+    } catch (err) {
+      console.error("Failed to load memorial", err);
+      setError("Failed to load memorial");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMemorial();
+}, [idOrWebsite]);
+
 
   if (loading) return <div className="p-6 text-center">Loading memorial...</div>;
   if (error) return <div className="p-6 text-center text-red-600">{error}</div>;

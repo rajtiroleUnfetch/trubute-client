@@ -9,34 +9,34 @@ function TributePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-const API_BASE = import.meta.env.VITE_API_BASE as string;
+useEffect(() => {
+  if (!slug) return;
 
+  const fetchMemorial = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  useEffect(() => {
-    if (!slug) return;
+      const { data } = await axiosInstance.get(
+        `/memorials/${slug}`
+      );
 
-    async function fetchMemorial() {
-      try {
-        setLoading(true);
-        setError(null);
+      // API sometimes returns { memorial } or the object itself
+      setMemorial(data.memorial ?? data);
+    } catch (err: any) {
+      console.error("Memorial fetch error:", err);
 
-        const res = await fetch(`${API_BASE}/memorials/${slug}`);
-        if (!res.ok) {
-          throw new Error(`Failed to fetch memorial (${res.status})`);
-        }
-
-        const data = await res.json();
-        setMemorial(data.memorial ?? data);
-      } catch (err: any) {
-        console.error("Memorial fetch error:", err);
-        setError(err.message || "Failed to load memorial");
-      } finally {
-        setLoading(false);
-      }
+      setError(
+        err?.response?.data?.message ||
+        "Failed to load memorial"
+      );
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchMemorial();
-  }, [slug, API_BASE]);
+  fetchMemorial();
+}, [slug]);
 
   if (loading) {
     return (
