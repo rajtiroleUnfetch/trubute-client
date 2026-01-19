@@ -12,7 +12,18 @@ const base = {
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 700,
-
+    navbar: {
+      background: "#ffffff",
+      border: "#e5e7eb",
+      logo: "#1f2937",
+      logoAccent: "#1565c0",
+      link: "#374151",
+      linkActive: "#1565c0",
+      searchBg: "#ffffff",
+      searchButtonBg: "#1565c0",
+      searchButtonHover: "#0d47a1",
+      avatarBg: "#1565c0",
+    },
     h1: {
       fontSize: "3rem",
       fontWeight: 400,
@@ -71,8 +82,8 @@ export const tributeThemes = {
         main: "#374151", // soft charcoal
       },
       gradients: {
-    soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
-  },
+        soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
+      },
       text: {
         primary: "#111827",
         secondary: "#6b7280",
@@ -94,8 +105,8 @@ export const tributeThemes = {
         main: "#e5c07b", // warm gold
       },
       gradients: {
-    soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
-  },
+        soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
+      },
       navbar: {
         background: "#ffffff",
         border: "#e5e7eb",
@@ -127,20 +138,21 @@ export const tributeThemes = {
       mode: "light",
       primary: { main: "#0d47a1" },
       navbar: {
-        background: "#111827",
+        background: "#fafafa",
         border: "#374151",
-        logo: "#f9fafb",
-        logoAccent: "#e5c07b",
-        link: "#d1d5db",
-        linkActive: "#e5c07b",
-        searchBg: "#1f2937",
-        searchButtonBg: "#e5c07b",
-        searchButtonHover: "#d4b06a",
-        avatarBg: "#e5c07b",
+        logo: "#0d47a1",
+        logoAccent: "#1565c0",
+        link: "#0d47a1",
+        linkActive: "#0d47a1",
+        searchBg: "#ffffff",
+        searchButtonBg: "#1565c0",
+        searchButtonHover: "#0d47a1",
+        avatarBg: "#1565c0",
       },
-gradients: {
-    soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
-  },
+      gradients: {
+        soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
+      },
+
       secondary: { main: "#1565c0" },
       background: { default: "#fafafa" },
       text: {
@@ -152,6 +164,7 @@ gradients: {
   }),
 
   pink: createTheme({
+    ...base,
     palette: {
       mode: "light",
 
@@ -160,9 +173,9 @@ gradients: {
         light: "#e8cfd8",
         dark: "#8e566b",
       },
-gradients: {
-    soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
-  },
+      gradients: {
+        soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
+      },
       secondary: {
         main: "#d6a3b5",
         light: "#f3e2e8",
