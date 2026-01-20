@@ -1,32 +1,49 @@
-import { Box, Typography, IconButton, Stack, Link } from "@mui/material";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Stack,
+  Link,
+  useTheme,
+} from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const Footer = () => {
+  const theme = useTheme();
+  const footer = theme.palette.footer;
+console.log('theme',theme);
+
   return (
     <Box
       component="footer"
       sx={{
-        bgcolor: "#0d47a1",
-        color: "#fff",
+        bgcolor: footer?.background,
+        color: footer?.text,
         py: 4,
         mt: 8,
+        borderTop: `1px solid ${footer?.border}`,
       }}
     >
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-      >
-        {/* Brand / Tagline */}
-        <Typography variant="h6" fontWeight={600}>
+      <Stack spacing={2} alignItems="center">
+        {/* Brand */}
+        <Typography
+          variant="h6"
+          fontWeight={600}
+          sx={{ color: footer?.brand }}
+        >
           Trubute.com
         </Typography>
 
+        {/* Tagline */}
         <Typography
           variant="body2"
-          sx={{ opacity: 0.9, maxWidth: 500, textAlign: "center" }}
+          sx={{
+            color: footer?.textSecondary,
+            maxWidth: 520,
+            textAlign: "center",
+          }}
         >
           Create and share meaningful tributes to honor the lives and memories
           of loved ones.
@@ -38,11 +55,9 @@ const Footer = () => {
             component={Link}
             href="https://www.facebook.com/trubute"
             target="_blank"
-            rel="noopener"
-            aria-label="Trubute Facebook"
             sx={{
-              color: "#fff",
-              "&:hover": { color: "#90caf9" },
+              color: footer?.icon,
+              "&:hover": { color: footer?.facebook },
             }}
           >
             <FacebookIcon />
@@ -52,11 +67,9 @@ const Footer = () => {
             component={Link}
             href="https://www.instagram.com/trubute"
             target="_blank"
-            rel="noopener"
-            aria-label="Trubute Instagram"
             sx={{
-              color: "#fff",
-              "&:hover": { color: "#f48fb1" },
+              color: footer?.icon,
+              "&:hover": { color: footer?.instagram },
             }}
           >
             <InstagramIcon />
@@ -66,11 +79,9 @@ const Footer = () => {
             component={Link}
             href="https://www.linkedin.com/company/trubute"
             target="_blank"
-            rel="noopener"
-            aria-label="Trubute LinkedIn"
             sx={{
-              color: "#fff",
-              "&:hover": { color: "#64b5f6" },
+              color: footer?.icon,
+              "&:hover": { color: footer?.linkedin },
             }}
           >
             <LinkedInIcon />
@@ -78,10 +89,7 @@ const Footer = () => {
         </Stack>
 
         {/* Copyright */}
-        <Typography
-          variant="caption"
-          sx={{ opacity: 0.8 }}
-        >
+        <Typography variant="caption" sx={{ color: footer?.textMuted }}>
           © {new Date().getFullYear()} Trubute.com — All rights reserved.
         </Typography>
       </Stack>

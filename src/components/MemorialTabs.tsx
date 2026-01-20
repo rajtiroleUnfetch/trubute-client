@@ -450,16 +450,20 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
   };
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        mt: 8,
-        borderRadius: 3,
-        backgroundColor: "background.paper",
-        border: "1px solid",
-        borderColor: "divider",
-      }}
-    >
+    
+<Paper
+  elevation={0}
+  sx={{
+    mt: 8,
+    borderRadius: 3,
+    bgcolor: "background.paper",
+    border: "1px solid",
+    borderColor: "divider",
+    width: { xs: "100%", md: "70vw" },
+  }}
+>
+
+      
       {/* TABS HEADER */}
       <Tabs
         value={tab}

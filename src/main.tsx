@@ -8,9 +8,9 @@ import "slick-carousel/slick/slick-theme.css";
 // import "@fontsource/merriweather";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "@emotion/react";
-import theme from "./theme";
 import { CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { tributeThemes } from "./tributeTheme";

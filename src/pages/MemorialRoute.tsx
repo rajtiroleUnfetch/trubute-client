@@ -1,36 +1,55 @@
 // src/routes/MemorialRoute.tsx
-import { ThemeProvider } from "@mui/material/styles";
+
 import { useParams } from "react-router-dom";
 import MemorialPage from "../pages/MemorialPage";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../api/axiosInstance";
-import { tributeThemes } from "../tributeTheme";
+import { tributeThemes, type TributeThemeKey } from "../tributeTheme";
 import MainLayout from "./MainLayout";
+import { ThemeProvider } from "@mui/material/styles";
+import Navbar from "../components/Navbar";
+import { Box } from "@mui/material";
+import Footer from "../components/Footer";
 
-const fetchMemorialTheme = async (website: string) => {
+const fetchMemorialTheme = async (
+  website: string
+): Promise<TributeThemeKey | null> => {
   const res = await axiosInstance.get(`/memorials/${website}`);
-  return res.data.memorial?.theme; // "pink" | "blue" | etc
+  return res.data.memorial?.theme ?? null;
+};
+
+// Fetch memorial
+const fetchMemorial = async (website: string) => {
+  const res = await axiosInstance.get(`/memorials/${website}`);
+  return res.data.memorial;
 };
 
 const MemorialRoute = () => {
   const { website } = useParams();
 
-  const { data: themeKey, isLoading } = useQuery({
-    queryKey: ["memorial-theme", website],
-    queryFn: () => fetchMemorialTheme(website!),
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["memorial", website],
+    queryFn: () => fetchMemorial(website!),
     enabled: !!website,
   });
 
   if (isLoading) return null;
 
+  const memorial = data.theme;
   const theme =
-    (themeKey && tributeThemes[themeKey]) || tributeThemes.pink;
+    memorial && memorial in tributeThemes
+      ? tributeThemes[memorial]
+      : tributeThemes.pink;
+
+  console.log("fasdfa", theme);
 
   return (
     <ThemeProvider theme={theme}>
-      <MainLayout>
-        <MemorialPage />
-      </MainLayout>
+      <Navbar memorial={true} />
+      <Box sx={{ minHeight: "80vh" }}>
+        <MemorialPage data={data} isLoading={isLoading} isError={isError} />
+      </Box>
+      <Footer />
     </ThemeProvider>
   );
 };

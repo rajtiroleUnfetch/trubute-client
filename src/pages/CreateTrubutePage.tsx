@@ -14,6 +14,7 @@ import {
   Checkbox,
   InputAdornment,
   Collapse,
+  CircularProgress,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -108,16 +109,23 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
 }) => {
   const { user } = useAuth();
   const selectedPlanName = lovedOneForm.watch("plan");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedPlan = plans.find((p) => p.name === selectedPlanName);
 
   const { mutateAsync: createOrder } = useCreatePaymentOrder();
 
-  const handlePayment = async () => {
-    if (!selectedPlan) {
+  const handlePayment = async (planOverride?: (typeof plans)[number]) => {
+    const plan = planOverride ?? selectedPlan;
+
+    if (!plan || isSubmitting) return;
+console.log('plan',plan);
+
+    if (!plan) {
       alert("Please select a plan");
       return;
     }
+    console.log(selectedPlan);
 
     // FREE PLAN
     // if (selectedPlan.type === "free") {
@@ -126,12 +134,12 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
     //   setActiveStep(3);
     //   return;
     // }
-
+    if (isSubmitting) return;
     try {
       // CREATE ORDER
-
+      setIsSubmitting(true);
       const order = await createOrder({
-        planType: selectedPlan.type,
+        planType: plan.type,
         userId: user?._id!,
       });
       console.log("tempMemorialId", order?.tempMemorialId);
@@ -166,6 +174,8 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
         theme: {
           color: "#b68b43",
         },
+
+        
       };
 
       const razorpay = new (window as any).Razorpay(options);
@@ -194,7 +204,15 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
               return (
                 <Grid key={plan.name}>
                   <Card
-                    onClick={() => field.onChange(plan.name)}
+                    // onClick={() => field.onChange(plan.name)}
+                    onClick={() => {
+                      field.onChange(plan.name);
+
+                      // 🔥 SINGLE CLICK FREE PLAN
+                      if (plan.type === "free") {
+                        handlePayment(plan); // 👈 PASS PLAN DIRECTLY
+                      }
+                    }}
                     elevation={isSelected ? 6 : 2}
                     sx={{
                       width: 280,
@@ -249,7 +267,7 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
 
       {/* CONTINUE / PAY BUTTON */}
       <Box mt={4}>
-        <Button
+        {/* <Button
           size="large"
           variant="contained"
           onClick={handlePayment}
@@ -263,6 +281,16 @@ const StepThreePlan: React.FC<StepThreePlanProps> = ({
           }}
         >
           {selectedPlan?.type === "free" ? "Free Plan" : "Pay Now"}
+        </Button> */}
+        <Button
+          size="large"
+          variant="contained"
+          disabled={
+            isSubmitting || !selectedPlan || selectedPlan.type === "free"
+          }
+          onClick={() => handlePayment()}
+        >
+          {isSubmitting ? <CircularProgress size={24} /> : "Pay Now"}
         </Button>
       </Box>
 
@@ -301,7 +329,7 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
       onSuccess: (res) => {
         console.log("✅ Memorial created:", res.memorial);
 
-        const website = data.website.trim().toLowerCase();
+        const website = res?.memorial?.website.trim().toLowerCase();
         alert("🎉 Memorial created successfully!");
         navigate(`/memorial/${website}`);
       },
@@ -535,7 +563,7 @@ export const CreateTributePage: React.FC = () => {
       designation: "",
       specialDesignation: "",
       moreDetails: "",
-      plan: "",
+      plan: "Free Trial",
       privacy: "public",
     },
   });
@@ -1038,56 +1066,56 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
               </Typography>
             )}
 
-          <Stack direction="row" spacing={2} alignItems="center">
-  <Controller
-    name="bornDay"
-    control={control}
-    render={({ field, fieldState }) => (
-      <DatePicker
-        label="Date of Birth"
-        value={field.value ? dayjs(field.value) : null}
-        onChange={(date) =>
-          field.onChange(date ? date.toISOString() : "")
-        }
-        slotProps={{
-          textField: {
-            size: "small",
-            fullWidth: true,
-            error: !!fieldState.error,
-            helperText: fieldState.error?.message,
-            required: true,
-          },
-        }}
-      />
-    )}
-  />
-</Stack>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Controller
+                name="bornDay"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <DatePicker
+                    label="Date of Birth"
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) =>
+                      field.onChange(date ? date.toISOString() : "")
+                    }
+                    slotProps={{
+                      textField: {
+                        size: "small",
+                        fullWidth: true,
+                        error: !!fieldState.error,
+                        helperText: fieldState.error?.message,
+                        required: true,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Stack>
 
-          <Stack direction="row" spacing={2} alignItems="center">
-  <Controller
-    name="passedDay"
-    control={control}
-    render={({ field, fieldState }) => (
-      <DatePicker
-        label="Date of Passing"
-        value={field.value ? dayjs(field.value) : null}
-        onChange={(date) =>
-          field.onChange(date ? date.toISOString() : "")
-        }
-        disableFuture
-        slotProps={{
-          textField: {
-            size: "small",
-            fullWidth: true,
-            error: !!fieldState.error,
-            helperText: fieldState.error?.message,
-            required: true,
-          },
-        }}
-      />
-    )}
-  />
-</Stack>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Controller
+                name="passedDay"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <DatePicker
+                    label="Date of Passing"
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) =>
+                      field.onChange(date ? date.toISOString() : "")
+                    }
+                    disableFuture
+                    slotProps={{
+                      textField: {
+                        size: "small",
+                        fullWidth: true,
+                        error: !!fieldState.error,
+                        helperText: fieldState.error?.message,
+                        required: true,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Stack>
 
             {/* --- Relationship Dropdown --- */}
             <Controller
@@ -1181,7 +1209,7 @@ const StepTwoLovedOne: React.FC<StepTwoLovedOneProps> = ({
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        .tribute.com
+                        .trubute.com
                       </InputAdornment>
                     ),
                   }}

@@ -2,7 +2,7 @@ import "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
-    navbar: {
+    navbar?: {
       background: string;
       border: string;
       logo: string;
@@ -13,6 +13,37 @@ declare module "@mui/material/styles" {
       searchButtonBg: string;
       searchButtonHover: string;
       avatarBg: string;
+    };
+    gradients?: {
+      soft?: string;
+    };
+    footer?: {
+      background: string;
+      border: string;
+      text: string;
+      textSecondary: string;
+      textMuted: string;
+      brand: string;
+      icon: string;
+      facebook: string;
+      instagram: string;
+      linkedin: string;
+    };
+    memorial?: {
+      cardBg: string;
+      inviteBg: string;
+      photoBg: string;
+      border: string;
+
+      inviteBtnBg: string;
+      inviteBtnHover: string;
+
+      facebookBg: string;
+      facebookText: string;
+
+      instagramBorder: string;
+      instagramHover: string;
+      instagramText: string;
     };
   }
 
@@ -29,5 +60,10 @@ declare module "@mui/material/styles" {
       searchButtonHover?: string;
       avatarBg?: string;
     };
+    gradients?: {
+      soft?: string;
+    };
+    memorial?: Partial<Palette["memorial"]>;
+    footer?: Partial<Palette["footer"]>;
   }
 }

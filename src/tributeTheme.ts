@@ -3,10 +3,42 @@ import { createTheme } from "@mui/material/styles";
 /* ------------------------------------
    BASE TYPOGRAPHY & SHAPE
 ------------------------------------ */
+
 const base = {
   typography: {
     fontFamily: `"Inter", "Helvetica", "Arial", sans-serif`,
+    footer: {
+      background: "#1565c0", // soft blue-white
+      border: "#dbeafe", // light blue border
 
+      text: "#0f172a", // deep navy
+      textSecondary: "#334155", // slate blue
+      textMuted: "#64748b", // muted blue-gray
+
+      brand: "#0d47a1", // strong memorial blue
+      icon: "#1565c0", // lighter blue for icons
+
+      facebook: "#1877f2",
+      instagram: "#e1306c", // instagram pink-red for contrast
+      linkedin: "#0a66c2",
+    },
+
+    memorial: {
+      cardBg: "#f8fafc", // soft neutral
+      inviteBg: "#eff6ff", // light blue
+      photoBg: "#e0f2fe", // photo highlight
+      border: "#dbeafe",
+
+      inviteBtnBg: "#0d47a1",
+      inviteBtnHover: "#0b3c91",
+
+      facebookBg: "#eaf3ff",
+      facebookText: "#1877f2",
+
+      instagramBorder: "#f3c6de",
+      instagramHover: "#fdf0f7",
+      instagramText: "#c13584",
+    },
     // ✅ REQUIRED FONT WEIGHTS
     fontWeightLight: 300,
     fontWeightRegular: 400,
@@ -81,6 +113,23 @@ export const tributeThemes = {
       primary: {
         main: "#374151", // soft charcoal
       },
+      memorial: {
+        cardBg: "#ffffff",
+        inviteBg: "#f8fafc",
+        photoBg: "#f1f5f9",
+        border: "#e5e7eb",
+
+        inviteBtnBg: "#334155", // slate
+        inviteBtnHover: "#1e293b",
+
+        facebookBg: "#eff6ff",
+        facebookText: "#1877f2",
+
+        instagramBorder: "#e5e7eb",
+        instagramHover: "#f8fafc",
+        instagramText: "#64748b",
+      },
+
       gradients: {
         soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
       },
@@ -104,6 +153,23 @@ export const tributeThemes = {
       primary: {
         main: "#e5c07b", // warm gold
       },
+      memorial: {
+        cardBg: "#0f172a", // deep slate
+        inviteBg: "#020617", // darker panel
+        photoBg: "#1e293b",
+        border: "#334155",
+
+        inviteBtnBg: "#38bdf8", // soft cyan
+        inviteBtnHover: "#0ea5e9",
+
+        facebookBg: "#1e293b",
+        facebookText: "#60a5fa",
+
+        instagramBorder: "#475569",
+        instagramHover: "#1e293b",
+        instagramText: "#f472b6",
+      },
+
       gradients: {
         soft: "linear-gradient(135deg, #fce7f3, #fbcfe8)", // example
       },
@@ -137,6 +203,22 @@ export const tributeThemes = {
     palette: {
       mode: "light",
       primary: { main: "#0d47a1" },
+      memorial: {
+        cardBg: "#f8fafc", // soft neutral
+        inviteBg: "#eff6ff", // light blue
+        photoBg: "#e0f2fe", // photo highlight
+        border: "#dbeafe",
+
+        inviteBtnBg: "#0d47a1",
+        inviteBtnHover: "#0b3c91",
+
+        facebookBg: "#eaf3ff",
+        facebookText: "#1877f2",
+
+        instagramBorder: "#f3c6de",
+        instagramHover: "#fdf0f7",
+        instagramText: "#c13584",
+      },
       navbar: {
         background: "#fafafa",
         border: "#374151",
@@ -167,6 +249,59 @@ export const tributeThemes = {
     ...base,
     palette: {
       mode: "light",
+      navbar: {
+        background: "#fff7fb", // blush white (very soft pink)
+        border: "#f3c6de", // light rose border
+
+        logo: "#9d174d", // deep rose (brand anchor)
+        logoAccent: "#be185d", // rich pink accent
+
+        link: "#6b1f3b", // muted wine (readable)
+        linkActive: "#be185d", // strong pink highlight
+
+        searchBg: "#fde8f2", // soft pink input background
+        searchButtonBg: "#9d174d", // rose button
+        searchButtonHover: "#831843", // darker wine hover
+
+        avatarBg: "#be185d", // consistent accent pink
+      },
+
+      footer: {
+        background: "#fff7fb", // blush white
+        border: "#f3c6de",
+
+        text: "#6b1f3b", // wine
+        textSecondary: "#7a2945",
+        textMuted: "#9d4b6a",
+
+        brand: "#9d174d", // deep rose
+        icon: "#be185d",
+
+        facebook: "#1877f2",
+        instagram: "#c13584",
+        linkedin: "#0a66c2",
+      },
+
+      memorial: {
+        // CARDS
+        cardBg: "#ff6f61", // very light blush (main card)
+        inviteBg: "#ffb3ba", // peach-pink (invite emphasis)
+        photoBg: "#ff4c4c", // deeper rosy highlight
+        border: "#f1b6cc", // visible pink border
+
+        // PRIMARY ACTION
+        inviteBtnBg: "#a11c44", // wine red (strong CTA)
+        inviteBtnHover: "#7f1233",
+
+        // FACEBOOK
+        facebookBg: "#eef2ff",
+        facebookText: "#1877f2",
+
+        // INSTAGRAM
+        instagramBorder: "#f28ab2", // vivid pink border
+        instagramHover: "#fff0f5", // soft rose hover
+        instagramText: "#c2185b", // reddish-pink text
+      },
 
       primary: {
         main: "#b07a8f", // dusty rose (buttons, highlights)
@@ -273,3 +408,14 @@ export const tributeThemes = {
     },
   }),
 };
+
+// tributeTheme.ts
+export const TtributeThemes = {
+  default: tributeThemes.default,
+  light: tributeThemes.light,
+  dark: tributeThemes.dark,
+  blue: tributeThemes.blue,
+  pink: tributeThemes.pink,
+} as const;
+
+export type TributeThemeKey = keyof typeof tributeThemes;

@@ -408,7 +408,7 @@ import { useState } from "react";
 import theme from "../theme";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ memorial }: { memorial?: boolean }) => {
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -448,6 +448,13 @@ const Navbar = () => {
     { label: "Contact", path: "/contact" },
     { label: "Pricing", path: "/pricing" },
   ];
+
+  const memorialNavItems = [
+    { label: "Create new website", path: "/" },
+    { label: "Invite others", path: "/invite" },
+    { label: "Contact support", path: "/contact" },
+  ];
+  const finalNavItems = memorial ? [...memorialNavItems] : navItems;
 
   const handleNavClick = (path: string) => {
     navigate(path);
@@ -489,7 +496,7 @@ const Navbar = () => {
       <Divider />
 
       <List>
-        {navItems.map((item) => (
+        {finalNavItems.map((item) => (
           <ListItem key={item.path} disablePadding>
             <ListItemButton
               onClick={() => handleNavClick(item.path)}
@@ -592,7 +599,7 @@ const Navbar = () => {
                 mr: 4,
               }}
             >
-              {navItems.map((item) => (
+              {finalNavItems.map((item) => (
                 <Typography
                   key={item.path}
                   variant="body1"
@@ -613,83 +620,103 @@ const Navbar = () => {
                 </Typography>
               ))}
             </Box>
-
+            {user ? memorial&&(
+              <IconButton onClick={handleProfileClick}>
+                <Avatar sx={{ bgcolor: theme.palette.navbar?.avatarBg }}>
+                  {user.name?.charAt(0).toUpperCase()}
+                </Avatar>
+              </IconButton>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => navigate(buttonRoute)}
+                sx={{
+                  textTransform: "none",
+                  whiteSpace: "nowrap",
+                }}
+                color="primary"
+              >
+                {buttonText}
+              </Button>
+            )}
             {/* Right section */}
             {isDesktop ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                  ml: "auto",
-                }}
-              >
-                {/* Search (desktop) */}
+              !memorial && (
                 <Box
-                  component="form"
-                  onSubmit={handleSearch}
                   sx={{
-                    backgroundColor: theme.palette.navbar?.searchBg,
-                    borderRadius: 5,
-                    boxShadow: theme.shadows[1],
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    ml: "auto",
                   }}
                 >
-                  <TextField
-                    size="small"
-                    variant="outlined"
-                    placeholder="Search obituaries..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    InputProps={{
-                      disableUnderline: true,
-                      sx: {
-                        "& fieldset": { border: "none" },
-                        px: 2,
-                      },
-                    }}
+                  {/* Search (desktop) */}
+                  <Box
+                    component="form"
+                    onSubmit={handleSearch}
                     sx={{
-                      flexGrow: 1,
-                    }}
-                  />
-                  <IconButton
-                    type="submit"
-                    sx={{
-                      bgcolor: theme.palette.navbar?.searchButtonBg,
-                      color: "#fff",
-                      "&:hover": {
-                        bgcolor: theme.palette.navbar?.searchButtonHover,
-                      },
+                      backgroundColor: theme.palette.navbar?.searchBg,
+                      borderRadius: 5,
+                      boxShadow: theme.shadows[1],
                     }}
                   >
-                    <Search />
-                  </IconButton>
-                </Box>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      placeholder="Search obituaries..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      InputProps={{
+                        disableUnderline: true,
+                        sx: {
+                          "& fieldset": { border: "none" },
+                          px: 2,
+                        },
+                      }}
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    />
+                    <IconButton
+                      type="submit"
+                      sx={{
+                        bgcolor: theme.palette.navbar?.searchButtonBg,
+                        color: "#fff",
+                        "&:hover": {
+                          bgcolor: theme.palette.navbar?.searchButtonHover,
+                        },
+                      }}
+                    >
+                      <Search />
+                    </IconButton>
+                  </Box>
 
-                {/* Profile / Auth (desktop) */}
-                {user ? (
-                  <IconButton onClick={handleProfileClick}>
-                    <Avatar sx={{ bgcolor: theme.palette.navbar?.avatarBg }}>
-                      {user.name?.charAt(0).toUpperCase()}
-                    </Avatar>
-                  </IconButton>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate(buttonRoute)}
-                    sx={{
-                      textTransform: "none",
-                      whiteSpace: "nowrap",
-                    }}
-                    color="primary"
-                  >
-                    {buttonText}
-                  </Button>
-                )}
-              </Box>
+                  {/* Profile / Auth (desktop) */}
+                  {user ? (
+                    <IconButton onClick={handleProfileClick}>
+                      <Avatar sx={{ bgcolor: theme.palette.navbar?.avatarBg }}>
+                        {user.name?.charAt(0).toUpperCase()}
+                      </Avatar>
+                    </IconButton>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => navigate(buttonRoute)}
+                      sx={{
+                        textTransform: "none",
+                        whiteSpace: "nowrap",
+                      }}
+                      color="primary"
+                    >
+                      {buttonText}
+                    </Button>
+                  )}
+                </Box>
+              )
             ) : (
               // MOBILE: Only Hamburger (no Login button)
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                {user ? (
+                {user &&!memorial ? (
                   <IconButton onClick={handleProfileClick}>
                     <Avatar sx={{ bgcolor: "#1565c0" }}>
                       {user.name?.charAt(0).toUpperCase()}
@@ -705,7 +732,7 @@ const Navbar = () => {
           </Box>
 
           {/* SECOND ROW: Search (mobile only, centered and padded) */}
-          {!isDesktop && (
+          {!isDesktop && !memorial && (
             <Box
               component="form"
               onSubmit={handleSearch}

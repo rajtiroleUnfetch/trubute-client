@@ -96,7 +96,6 @@
 
 // export default MemorialFullPage;
 
-
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -106,27 +105,23 @@ import {
   Paper,
   Divider,
   ThemeProvider,
+  Grid,
 } from "@mui/material";
 import axiosInstance from "../api/axiosInstance";
 import MemorialHero from "../components/MemorialHero";
 import MemorialTabs from "../components/MemorialTabs";
 import { tributeThemes } from "../tributeTheme";
+import MemorialSidebar from "../components/MemorialSidebar";
 
-// Fetch memorial
-const fetchMemorial = async (website: string) => {
-  const res = await axiosInstance.get(`/memorials/${website}`);
-  return res.data.memorial;
-};
-
-const MemorialFullPage = () => {
-  const { website } = useParams<{ website: string }>();
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["memorial", website],
-    queryFn: () => fetchMemorial(website!),
-    enabled: !!website,
-  });
-
+const MemorialFullPage = ({
+  data,
+  isLoading,
+  isError,
+}: {
+  data: any;
+  isLoading: boolean;
+  isError: boolean;
+}) => {
   if (isLoading) {
     return (
       <Box sx={{ mt: 12, display: "flex", justifyContent: "center" }}>
@@ -143,58 +138,85 @@ const MemorialFullPage = () => {
     );
   }
 
-  
   const memorial = data;
-  const themeKey = memorial?.theme || "default";
 
   return (
-    <ThemeProvider theme={tributeThemes[themeKey]}>
-
-    <Box
+    <Paper
+      elevation={0}
       sx={{
-        maxWidth: 1000,
-        mx: "auto",
-        px: 3,
-        py: 6,
+        p: { xs: 3, md: 5 },
+        border: "1px solid",
+        borderColor: "divider",
+        maxWidth: "100vw",
       }}
     >
-      <Paper
-        elevation={0}
+      {/* HERO */}
+      <MemorialHero memorial={memorial} />
+
+      {/* TABS */}
+      <Divider sx={{ my: 4 }} />
+
+      <Box
         sx={{
-          p: { xs: 3, md: 5 },
-          border: "1px solid",
-          borderColor: "divider",
-          backgroundColor: "background.paper",
+          display: "flex",
+          flexDirection: {
+            xs: "column", // mobile
+            sm: "column", // tablet
+            md: "row", // desktop+
+          },
+          width: "100%",
+          gap: 2,
+          justifyContent: {
+            xs: "flex-start",
+            md: "space-between",
+          },
         }}
       >
-        {/* HERO */}
-        <MemorialHero memorial={memorial} />
+        <Box>
+          <MemorialTabs
+            memorial={memorial}
+            tributes={memorial.tributes || []}
+          />
+        </Box>
 
-        {/* TABS */}
-        <Divider sx={{ my: 4 }} />
+        <Box mt={8}>
+          <MemorialSidebar
+            name={memorial.firstName}
+            memorial={memorial}
+            profileImage={memorial.profile}
+            memorialUrl={memorial?.website}
+            // photosCount={memorial.photos?.length??0}
+            isSubscribed={false}
+            views={memorial?.views}
+            administeredBy={memorial.createdBy}
+          />
+        </Box>
+      </Box>
 
-        <MemorialTabs
-          memorial={memorial}
-          tributes={memorial.tributes || []}
-        />
-
-        {/* FOOTER */}
-        <Typography
-          variant="body2"
-          sx={{
-            textAlign: "center",
-            mt: 6,
-            color: "text.secondary",
-          }}
-        >
-          Created on{" "}
-          {new Date(memorial.createdAt).toLocaleDateString()}
-        </Typography>
-      </Paper>
-    </Box>
-    </ThemeProvider>
-
+      {/* FOOTER */}
+      <Typography
+        variant="body2"
+        sx={{
+          textAlign: "center",
+          mt: 6,
+          color: "text.secondary",
+        }}
+      >
+        Created on {new Date(memorial.createdAt).toLocaleDateString()}
+      </Typography>
+    </Paper>
   );
 };
+// <Box>
+//       <MemorialSidebar
+//         name={memorial.name}
+//         profileImage={memorial.profile}
+//         memorialUrl={memorial?.website}
+//         // photosCount={memorial.photos?.length??0}
+//         isSubscribed={false}
+//         views={memorial?.views ?? 0}
+//         administeredBy={memorial.createdBy}
+//       />
+//     </Box>
 
 export default MemorialFullPage;
