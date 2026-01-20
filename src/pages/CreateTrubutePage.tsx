@@ -318,7 +318,6 @@ const StepFourPrivacy: React.FC<StepFourPrivacyProps> = ({ lovedOneForm }) => {
 
     console.log("temp", tempMemorialId);
 
-    // Construct payload
     const payload = {
       ...data,
       tempMemorialId,
