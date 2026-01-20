@@ -680,7 +680,7 @@ const Navbar = ({ memorial }: { memorial?: boolean }) => {
                       type="submit"
                       sx={{
                         bgcolor: theme.palette.navbar?.searchButtonBg,
-                        color: "#fff",
+                        color: "#ffff",
                         "&:hover": {
                           bgcolor: theme.palette.navbar?.searchButtonHover,
                         },
