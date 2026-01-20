@@ -667,7 +667,6 @@ const Navbar = ({ memorial }: { memorial?: boolean }) => {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       InputProps={{
-                        disableUnderline: true,
                         sx: {
                           "& fieldset": { border: "none" },
                           px: 2,
@@ -763,7 +762,6 @@ const Navbar = ({ memorial }: { memorial?: boolean }) => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   InputProps={{
-                    disableUnderline: true,
                     sx: {
                       "& fieldset": { border: "none" },
                       px: 2,
