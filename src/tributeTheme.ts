@@ -103,7 +103,7 @@ export const defaultTributeTheme = createTheme({
    OTHER THEMES
 ------------------------------------ */
 export const tributeThemes = {
-  default: defaultTributeTheme,
+  //   default: defaultTributeTheme,
 
   /* ☀️ LIGHT */
   light: createTheme({
@@ -393,6 +393,185 @@ export const tributeThemes = {
         styleOverrides: {
           indicator: {
             backgroundColor: "#b07a8f",
+          },
+        },
+      },
+
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+            fontWeight: 500,
+          },
+        },
+      },
+    },
+  }),
+  default: createTheme({
+    ...base,
+    palette: {
+      mode: "light",
+
+      /* =========================
+       CORE COLORS (FROM SS)
+    ========================= */
+      primary: {
+        main: "#7b4a2e", // warm brown heading color
+        light: "#a6785a",
+        dark: "#5a341f",
+      },
+
+      secondary: {
+        main: "#c08a7a", // muted rose / clay pink
+        light: "#e5c1b7",
+        dark: "#9b5f52",
+      },
+
+      background: {
+        default: "#faf6f1", // parchment white
+        paper: "#ffffff",
+      },
+
+      text: {
+        primary: "#3a2720", // espresso brown
+        secondary: "#6a4a3a",
+      },
+
+      divider: "#e4d4c6",
+
+      /* =========================
+       NAVBAR
+    ========================= */
+      navbar: {
+        background: "#f4eee7",
+        border: "#e0cfc0",
+
+        logo: "#7b4a2e",
+        logoAccent: "#9c5c3a",
+
+        link: "#5c4033",
+        linkActive: "#7b4a2e",
+
+        searchBg: "#efe4da",
+        searchButtonBg: "#7b4a2e",
+        searchButtonHover: "#5a341f",
+
+        avatarBg: "#9c5c3a",
+      },
+
+      /* =========================
+       FOOTER
+    ========================= */
+      footer: {
+        background: "#f4eee7",
+        border: "#e0cfc0",
+
+        text: "#5c4033",
+        textSecondary: "#7a5a48",
+        textMuted: "#9b7a66",
+
+        brand: "#7b4a2e",
+        icon: "#9c5c3a",
+
+        facebook: "#1877f2",
+        instagram: "#c13584",
+        linkedin: "#0a66c2",
+      },
+
+      /* =========================
+       MEMORIAL SECTIONS
+    ========================= */
+      memorial: {
+        cardBg: "#fdfaf7", // soft card white
+        inviteBg: "#efe1d6", // invite panel beige
+        photoBg: "#ead8ca", // photo placeholder bg
+        border: "#e4d4c6",
+
+        inviteBtnBg: "#7b4a2e",
+        inviteBtnHover: "#5a341f",
+
+        facebookBg: "#f1f5ff",
+        facebookText: "#1877f2",
+
+        instagramBorder: "#c08a7a",
+        instagramHover: "#fbf1ee",
+        instagramText: "#9b5f52",
+      },
+
+      gradients: {
+        soft: "linear-gradient(180deg, #faf6f1, #f4eee7)",
+      },
+    },
+
+    /* =========================
+     TYPOGRAPHY
+  ========================= */
+    typography: {
+      fontFamily: `"Libre Baskerville", Georgia, serif`,
+
+      h1: {
+        fontFamily: `"Playfair Display", serif`,
+        fontWeight: 400,
+      },
+
+      h2: {
+        fontFamily: `"Playfair Display", serif`,
+        fontWeight: 500,
+      },
+
+      h3: {
+        fontFamily: `"Playfair Display", serif`,
+        fontWeight: 500,
+      },
+
+      body1: {
+        fontFamily: `"Libre Baskerville", serif`,
+      },
+
+      body2: {
+        fontFamily: `"Libre Baskerville", serif`,
+      },
+    },
+
+    shape: {
+      borderRadius: 12,
+    },
+
+    /* =========================
+     COMPONENT OVERRIDES
+  ========================= */
+    components: {
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: "none",
+          },
+        },
+      },
+
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            border: "1px solid #e4d4c6",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
+          },
+        },
+      },
+
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+            borderRadius: 24,
+            fontWeight: 500,
+          },
+        },
+      },
+
+      MuiTabs: {
+        styleOverrides: {
+          indicator: {
+            backgroundColor: "#7b4a2e",
           },
         },
       },

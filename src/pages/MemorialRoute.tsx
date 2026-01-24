@@ -27,7 +27,7 @@ const fetchMemorial = async (website: string) => {
 const MemorialRoute = () => {
   const { website } = useParams();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError ,refetch} = useQuery({
     queryKey: ["memorial", website],
     queryFn: () => fetchMemorial(website!),
     enabled: !!website,
@@ -47,7 +47,7 @@ const MemorialRoute = () => {
     <ThemeProvider theme={theme}>
       <Navbar memorial={true} />
       <Box sx={{ minHeight: "80vh" }}>
-        <MemorialPage data={data} isLoading={isLoading} isError={isError} />
+        <MemorialPage data={data} isLoading={isLoading} isError={isError} refetch={refetch}/>
       </Box>
       <Footer />
     </ThemeProvider>

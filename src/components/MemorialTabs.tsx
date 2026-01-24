@@ -450,20 +450,17 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
   };
 
   return (
-    
-<Paper
-  elevation={0}
-  sx={{
-    mt: 8,
-    borderRadius: 3,
-    bgcolor: "background.paper",
-    border: "1px solid",
-    borderColor: "divider",
-    width: { xs: "100%", md: "70vw" },
-  }}
->
-
-      
+    <Paper
+      elevation={0}
+      sx={{
+        mt: 8,
+        borderRadius: 3,
+        bgcolor: "background.paper",
+        border: "1px solid",
+        borderColor: "divider",
+        width: { xs: "100%", md: "70vw" },
+      }}
+    >
       {/* TABS HEADER */}
       <Tabs
         value={tab}
@@ -543,11 +540,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
               onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
             />
 
-            <Button
-              variant="contained"
-              sx={{ mt: 2 }}
-              onClick={uploadPhoto}
-            >
+            <Button variant="contained" sx={{ mt: 2 }} onClick={uploadPhoto}>
               Upload Photo
             </Button>
           </Paper>
@@ -559,7 +552,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
 
         <Grid container spacing={4}>
           {photos.map((t) => (
-            <Grid item xs={12} sm={6} md={4} key={t._id}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={t._id}>
               <Paper
                 elevation={0}
                 sx={{
@@ -605,7 +598,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
         {loading && (
           <Grid container spacing={4} sx={{ mt: 2 }}>
             {[1, 2, 3].map((s) => (
-              <Grid item xs={12} sm={6} md={4} key={s}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={s}>
                 <Skeleton variant="rectangular" height={260} />
                 <Skeleton sx={{ mt: 1 }} width="60%" />
               </Grid>
@@ -627,9 +620,7 @@ const MemorialTabs = ({ memorial, tributes }: MemorialTabsProps) => {
         <Typography variant="h4" sx={{ mb: 4 }}>
           Video Tributes
         </Typography>
-        <Typography color="text.secondary">
-          No videos yet.
-        </Typography>
+        <Typography color="text.secondary">No videos yet.</Typography>
       </TabPanel>
 
       {/* AUDIO */}

@@ -117,10 +117,12 @@ const MemorialFullPage = ({
   data,
   isLoading,
   isError,
+  refetch
 }: {
   data: any;
   isLoading: boolean;
   isError: boolean;
+  refetch: any;
 }) => {
   if (isLoading) {
     return (
@@ -151,7 +153,7 @@ const MemorialFullPage = ({
       }}
     >
       {/* HERO */}
-      <MemorialHero memorial={memorial} />
+      <MemorialHero memorial={memorial} refetch={refetch} />
 
       {/* TABS */}
       <Divider sx={{ my: 4 }} />

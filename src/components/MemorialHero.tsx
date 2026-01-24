@@ -42,7 +42,6 @@
 //   },
 // });
 
-
 //   const handleUpload = (file: File, type: "hero" | "profile") => {
 //     const formData = new FormData();
 //     formData.append("media", file); // MUST MATCH upload.single("media")
@@ -167,12 +166,7 @@
 
 // export default MemorialHero;
 
-import {
-  Box,
-  Typography,
-  Avatar,
-  IconButton,
-} from "@mui/material";
+import { Box, Typography, Avatar, IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import axiosInstance from "../api/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -181,12 +175,159 @@ import { useRef, useState } from "react";
 
 interface Props {
   memorial: any;
+  refetch: any;
 }
 
-const MemorialHero = ({ memorial }: Props) => {
+export const THEME_OPTIONS = [
+  {
+    key: "default",
+    label: "Warm",
+    preview: {
+      background: "linear-gradient(135deg, #faf6f1, #f4eee7)",
+    },
+  },
+  {
+    key: "light",
+    label: "Light",
+    preview: {
+      background: "#ffffff",
+    },
+  },
+  {
+    key: "pink",
+    label: "Pink",
+    preview: {
+      background: "linear-gradient(135deg, #fde4ec, #f8bbd0)",
+    },
+  },
+  {
+    key: "blue",
+    label: "Blue",
+    preview: {
+      background: "linear-gradient(135deg, #e3f2fd, #bbdefb)",
+    },
+  },
+  {
+    key: "lightBlue",
+    label: "Light Blue",
+    preview: {
+      background: "linear-gradient(135deg, #e0f7fa, #b2ebf2)",
+    },
+  },
+  {
+    key: "dark",
+    label: "Dark",
+    preview: {
+      background: "linear-gradient(135deg, #2c2c2c, #1c1c1c)",
+    },
+  },
+];
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Grid,
+  Button,
+  useTheme,
+} from "@mui/material";
+
+export const ThemeSelectorModal = ({
+  open,
+  selectedTheme,
+  onSelect,
+  onClose,
+  onSave,
+}: any) => {
+  const theme = useTheme();
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>Change theme</DialogTitle>
+
+      <DialogContent>
+        <Grid container spacing={3}>
+          {THEME_OPTIONS.map((t) => {
+            const active = selectedTheme === t.key;
+
+            return (
+              <Grid size={{ xs: 6, sm: 4, md: 3 }} key={t.key}>
+                <Box
+                  onClick={() => onSelect(t.key)}
+                  sx={{
+                    cursor: "pointer",
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    border: active
+                      ? `2px solid ${theme.palette.primary.main}`
+                      : `1px solid ${theme.palette.divider}`,
+                    boxShadow: active
+                      ? `0 0 0 3px ${theme.palette.primary.light}`
+                      : "none",
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                    },
+                  }}
+                >
+                  {/* Preview */}
+                  <Box
+                    sx={{
+                      height: 140,
+                      background: t.preview.background,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        bgcolor: "rgba(255,255,255,0.8)",
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 1,
+                      }}
+                    >
+                      Preview
+                    </Typography>
+                  </Box>
+
+                  {/* Label */}
+                  <Box sx={{ p: 1.2, textAlign: "center" }}>
+                    <Typography variant="body2" fontWeight={active ? 600 : 400}>
+                      {t.label}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 2,
+            mt: 4,
+          }}
+        >
+          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="contained" onClick={onSave}>
+            Save theme
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const MemorialHero = ({ memorial,refetch }: Props) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-
+  const [themeOpen, setThemeOpen] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(memorial.theme);
   const heroInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
 
@@ -196,11 +337,9 @@ const MemorialHero = ({ memorial }: Props) => {
   // Upload mutation
   const uploadMutation = useMutation({
     mutationFn: async (formData: FormData) =>
-      axiosInstance.post(
-        `/memorials/${memorial._id}/upload-image`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      ),
+      axiosInstance.post(`/memorials/${memorial._id}/upload-image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["memorial", memorial.website]);
       setHeroPreview(null);
@@ -224,13 +363,25 @@ const MemorialHero = ({ memorial }: Props) => {
     const file = e.target.files[0];
     const preview = URL.createObjectURL(file);
 
-    type === "hero"
-      ? setHeroPreview(preview)
-      : setProfilePreview(preview);
+    type === "hero" ? setHeroPreview(preview) : setProfilePreview(preview);
 
     handleUpload(file, type);
     e.target.value = "";
   };
+
+  const handleSaveTheme = async () => {
+  try {
+    await axiosInstance.put(`/memorials/${memorial._id}`, {
+      theme: selectedTheme,
+    });
+
+    setThemeOpen(false);
+    // reloadMemorial();
+    refetch();
+  } catch {
+    alert("Failed to update theme");
+  }
+};
 
   return (
     <Box
@@ -255,6 +406,31 @@ const MemorialHero = ({ memorial }: Props) => {
         px: 3,
       }}
     >
+      {user && (
+        <Box
+          sx={{
+            position: "absolute",
+            left: 16,
+            bottom: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => setThemeOpen(true)}
+            sx={{
+              borderRadius: 999,
+              textTransform: "none",
+              boxShadow: 2,
+            }}
+          >
+            Change theme
+          </Button>
+        </Box>
+      )}
       {/* HERO IMAGE UPLOAD */}
       {user && (
         <>
@@ -326,11 +502,15 @@ const MemorialHero = ({ memorial }: Props) => {
 
         {/* NAME */}
         <Typography variant="h1">
-          {memorial.firstName}{" "}
-          {memorial.middleName || ""}{" "}
-          {memorial.lastName}
+          {memorial.firstName} {memorial.middleName || ""} {memorial.lastName}
         </Typography>
-
+        <ThemeSelectorModal
+          open={themeOpen}
+          selectedTheme={selectedTheme}
+          onSelect={setSelectedTheme}
+          onClose={() => setThemeOpen(false)}
+          onSave={handleSaveTheme}
+        />
         <Typography
           sx={{
             mt: 2,
