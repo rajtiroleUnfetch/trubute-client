@@ -498,6 +498,8 @@ const MemorialStorySection = ({ memorial, formatDate }) => {
         fontSize: "1.05rem",
       }}
     >
+
+      
       {/* LIFE REMEMBERED */}
       <StorySection title="A Life Remembered">
         <Typography>

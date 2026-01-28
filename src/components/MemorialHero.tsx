@@ -171,7 +171,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import axiosInstance from "../api/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   memorial: any;
@@ -184,6 +184,7 @@ export const THEME_OPTIONS = [
     label: "Warm",
     preview: {
       background: "linear-gradient(135deg, #faf6f1, #f4eee7)",
+      heroImage: "../../public/images/1000226555.jpg",
     },
   },
   {
@@ -191,6 +192,7 @@ export const THEME_OPTIONS = [
     label: "Light",
     preview: {
       background: "#ffffff",
+      heroImage: "../../public/images/1000226559.jpg",
     },
   },
   {
@@ -198,6 +200,7 @@ export const THEME_OPTIONS = [
     label: "Pink",
     preview: {
       background: "linear-gradient(135deg, #fde4ec, #f8bbd0)",
+      heroImage: "../../public/images/1000226560.jpg",
     },
   },
   {
@@ -205,6 +208,7 @@ export const THEME_OPTIONS = [
     label: "Blue",
     preview: {
       background: "linear-gradient(135deg, #e3f2fd, #bbdefb)",
+      heroImage: "../../public/images/1000226561.jpg",
     },
   },
   {
@@ -212,6 +216,7 @@ export const THEME_OPTIONS = [
     label: "Light Blue",
     preview: {
       background: "linear-gradient(135deg, #e0f7fa, #b2ebf2)",
+      heroImage: "../../public/images/1000226562.jpg",
     },
   },
   {
@@ -219,6 +224,7 @@ export const THEME_OPTIONS = [
     label: "Dark",
     preview: {
       background: "linear-gradient(135deg, #2c2c2c, #1c1c1c)",
+      heroImage: "../../public/images/1000226559.jpg",
     },
   },
 ];
@@ -280,22 +286,15 @@ export const ThemeSelectorModal = ({
                       justifyContent: "center",
                     }}
                   >
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        bgcolor: "rgba(255,255,255,0.8)",
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: 1,
-                      }}
-                    >
-                      Preview
-                    </Typography>
+                    <img src={t.preview?.heroImage} />
                   </Box>
 
                   {/* Label */}
                   <Box sx={{ p: 1.2, textAlign: "center" }}>
-                    <Typography variant="body2" fontWeight={active ? 600 : 400}>
+                    <Typography
+                      sx={{ color: "#fffff" }}
+                      fontWeight={active ? 600 : 400}
+                    >
                       {t.label}
                     </Typography>
                   </Box>
@@ -323,7 +322,7 @@ export const ThemeSelectorModal = ({
   );
 };
 
-const MemorialHero = ({ memorial,refetch }: Props) => {
+const MemorialHero = ({ memorial, refetch }: Props) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [themeOpen, setThemeOpen] = useState(false);
@@ -356,7 +355,7 @@ const MemorialHero = ({ memorial,refetch }: Props) => {
 
   const handlePreview = (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "hero" | "profile"
+    type: "hero" | "profile",
   ) => {
     if (!e.target.files?.[0]) return;
 
@@ -370,18 +369,32 @@ const MemorialHero = ({ memorial,refetch }: Props) => {
   };
 
   const handleSaveTheme = async () => {
-  try {
-    await axiosInstance.put(`/memorials/${memorial._id}`, {
-      theme: selectedTheme,
-    });
+    try {
+      await axiosInstance.put(`/memorials/${memorial._id}`, {
+        theme: selectedTheme,
+      });
 
-    setThemeOpen(false);
-    // reloadMemorial();
-    refetch();
-  } catch {
-    alert("Failed to update theme");
-  }
-};
+      setThemeOpen(false);
+      // reloadMemorial();
+      refetch();
+    } catch {
+      alert("Failed to update theme");
+    }
+  };
+
+  useEffect(() => {
+    const theme = THEME_OPTIONS.find((t) => t.key === selectedTheme);
+
+    if (theme?.preview?.heroImage) {
+      setHeroPreview(theme.preview.heroImage);
+    }
+  }, [selectedTheme]);
+
+  const bornYear = new Date(memorial.bornDay).getFullYear();
+  const passedYear = new Date(memorial.passedDay).getFullYear();
+
+  console.log("fasdf", memorial.backgroud);
+  console.log("heroPreview", heroPreview);
 
   return (
     <Box
@@ -392,10 +405,10 @@ const MemorialHero = ({ memorial,refetch }: Props) => {
         overflow: "hidden",
         backgroundImage: `
           linear-gradient(
-            rgba(255,255,255,0.85),
-            rgba(255,255,255,0.85)
+            rgba(255,255,255,0.25),
+            rgba(255,255,255,0.25)
           ),
-          url(${heroPreview || memorial.backgroud})
+          url(${heroPreview})
         `,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -501,8 +514,15 @@ const MemorialHero = ({ memorial,refetch }: Props) => {
         </Box>
 
         {/* NAME */}
-        <Typography variant="h1">
+        <Typography variant="h2">
           {memorial.firstName} {memorial.middleName || ""} {memorial.lastName}
+        </Typography>
+        <Typography variant="h3">
+          {memorial.bornDay && memorial.passedDay
+            ? `${new Date(memorial.bornDay).getFullYear()} – ${new Date(
+                memorial.passedDay,
+              ).getFullYear()}`
+            : ""}
         </Typography>
         <ThemeSelectorModal
           open={themeOpen}

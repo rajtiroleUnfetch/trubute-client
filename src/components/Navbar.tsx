@@ -620,25 +620,7 @@ const Navbar = ({ memorial }: { memorial?: boolean }) => {
                 </Typography>
               ))}
             </Box>
-            {user ? memorial&&(
-              <IconButton onClick={handleProfileClick}>
-                <Avatar sx={{ bgcolor: theme.palette.navbar?.avatarBg }}>
-                  {user.name?.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-            ) : (
-              <Button
-                variant="contained"
-                onClick={() => navigate(buttonRoute)}
-                sx={{
-                  textTransform: "none",
-                  whiteSpace: "nowrap",
-                }}
-                color="primary"
-              >
-                {buttonText}
-              </Button>
-            )}
+        
             {/* Right section */}
             {isDesktop ? (
               !memorial && (
