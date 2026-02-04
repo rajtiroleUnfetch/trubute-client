@@ -173,14 +173,18 @@ export default function PlansPage() {
                 ))}
               </Box>
 
+            </CardContent>
+          </Card>
+        ))}
+      </Stack>
+
               <Button
                 fullWidth
                 sx={{
                   py: 1.2,
+                  mt:4,
                   fontWeight: 600,
-                  bgcolor: plan.highlight
-                    ? theme.palette.primary.main
-                    : theme.palette.secondary.main,
+                  bgcolor:  theme.palette.primary.main,
                   color: "#fff",
                   "&:hover": {
                     bgcolor: theme.palette.primary.dark,
@@ -189,11 +193,6 @@ export default function PlansPage() {
               >
                 Create Memorial
               </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </Stack>
-
       {/* Footer note */}
       <Typography
         sx={{

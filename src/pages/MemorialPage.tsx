@@ -140,6 +140,9 @@ const MemorialFullPage = ({
     );
   }
 
+  console.log(data,'data');
+  
+
   const memorial = data;
 
   return (

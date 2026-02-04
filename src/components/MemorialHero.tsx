@@ -397,7 +397,7 @@ const MemorialHero = ({ memorial, refetch }: Props) => {
   console.log("heroPreview", heroPreview);
 
   return (
-    <Box
+   <Box
       sx={{
         position: "relative",
         height: 360,
@@ -474,11 +474,12 @@ const MemorialHero = ({ memorial, refetch }: Props) => {
       {/* CONTENT */}
       <Box>
         {/* PROFILE */}
-        <Box sx={{ position: "relative", mb: 3 }}>
+        <Box sx={{ position: "relative", mb: 1}}>
           <Avatar
             src={profilePreview || memorial.profile}
             sx={{
-              width: 150,
+              width: '100%',
+              mt:10,
               height: 190,
               borderRadius: 1,
               mx: "auto",
@@ -514,10 +515,10 @@ const MemorialHero = ({ memorial, refetch }: Props) => {
         </Box>
 
         {/* NAME */}
-        <Typography variant="h2">
+        <Typography variant="h3">
           {memorial.firstName} {memorial.middleName || ""} {memorial.lastName}
         </Typography>
-        <Typography variant="h3">
+        <Typography variant="h4">
           {memorial.bornDay && memorial.passedDay
             ? `${new Date(memorial.bornDay).getFullYear()} – ${new Date(
                 memorial.passedDay,
