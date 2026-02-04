@@ -11,6 +11,10 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import TributePage from "./pages/tribute/TributePage";
 import MemorialRoute from "./pages/MemorialRoute";
+import SampleMemorialPage from "./pages/MemorialWebPage";
+import PlansPage from "./pages/PlansPage";
+import BlogsPage from "./pages/BlogsPage";
+import BlogDetailPage from "./pages/BlogDetailPage";
 
 function App() {
   return (
@@ -58,6 +62,38 @@ function App() {
         element={
           <MainLayout>
             <ContactPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/memorial-web"
+        element={
+          <MainLayout>
+            <SampleMemorialPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/plans"
+        element={
+          <MainLayout>
+            <PlansPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/blogs"
+        element={
+          <MainLayout>
+            <BlogsPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/blogs/:slug"
+        element={
+          <MainLayout>
+            <BlogDetailPage />
           </MainLayout>
         }
       />
