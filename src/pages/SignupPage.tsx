@@ -48,6 +48,8 @@ const SignupPage = () => {
       success: async function (widgetData: any) {
         try {
           setLoading(true);
+          console.log(widgetData,'widgetData');
+          
 
           // 🔥 Immediately call backend after OTP success
           const res = await axiosInstance.post("/auth/signup", {
