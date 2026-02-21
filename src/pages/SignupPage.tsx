@@ -35,7 +35,7 @@ const SignupPage = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+console.log('widgetData');
   // 🔥 This runs when user clicks button
   const handleSignup = async (data: SignupForm) => {
     const phone = data.phone;
@@ -63,6 +63,7 @@ const SignupPage = () => {
           toast.success("Signup successful ✅");
           navigate("/"); // 🔥 redirect directly
         } catch (err: any) {
+          console.error(err)
           toast.error(
             err?.response?.data?.message || "Signup failed"
           );
