@@ -57,7 +57,7 @@ console.log('widgetData');
             email: data.email,
             phone: data.phone,
             password: data.password,
-            accessToken: widgetData.token,
+            accessToken: widgetData?.message,
           });
 
           toast.success("Signup successful ✅");
